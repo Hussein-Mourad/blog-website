@@ -102,25 +102,28 @@ date_default_timezone_set("Asia/Riyadh");
         foreach ($posts ?? [] as $post) {
             $postId = $post[0];
             $title = $post[1];
-            $content = truncateText($post[2], 300);
+            $content = truncateText($post[2], 200);
             $thumbnail = $post[3];
             $author = $post[5];
             $updatedAt = timeAgo(strtotime($post[6]));
             $category = $post[8];
-
-
+            if (empty($thumbnail))
+                $thumbnail = "/assets/imgs/default_image.png";
         ?>
             <a href="post.php?id=<?= $postId ?>">
                 <div class="card mb-3">
                     <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src=".<?= $thumbnail ?>" alt="thumbnail" class="img-fluid rounded-start" />
+                        <div class="col-md-4 position-relative overflow-hidden">
+                            <img src=".<?= $thumbnail ?>" alt="thumbnail" class="img-fluid rounded-start position-absolute w-100, h-100 object-cover" />
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
                                 <h5 class="card-title"><?= $title ?></h5>
                                 <p class="card-text">
                                     <?= $content ?>
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">By: <?= $author ?></small>
                                 </p>
                                 <p class="card-text">
                                     <small class="text-muted">Last updated <?= $updatedAt ?></small>

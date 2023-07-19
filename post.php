@@ -11,8 +11,10 @@ if (!$post)
     header("location: index.php");
 $postId = $post["id"];
 $title = $post['title'];
-$content = truncateText($post['content'], 300);
+$content = $post['content'];
 $thumbnail = $post['thumbnail'];
+if (empty($thumbnail))
+    $thumbnail = "/assets/imgs/default_image.png";
 $author = $post['author'];
 $updatedAt = timeAgo(strtotime($post['updatedAt']));
 $category = $post['category'];
@@ -36,7 +38,7 @@ $category = $post['category'];
         .thumbnail {
             /* max-width: 300px; */
             width: 100%;
-            max-height: 600px;
+            max-height: 1000px;
             overflow: hidden;
         }
     </style>
@@ -117,17 +119,22 @@ $category = $post['category'];
         <!-- Container wrapper -->
     </nav>
     <section class="container pt-5">
-        <div>
+        <div class="card mb-3">
             <div class="row">
-                <small class="text-secondary"><?= $category ?> <?= $updatedAt ?></small>
-                <h1 class="mb-3"><?= $title ?> </h1>
+                <div class="col-md-4 position-relative overflow-hidden d-flex justify-content-center align-items-center">
+                    <img src=".<?= $thumbnail ?>" alt="thumbnail" class="img-fluid rounded-start position-absolute w-100, h-100 object-cover" />
+                </div>
             </div>
-            <div class="thumbnail mb-5">
-                <img src=".<?= $thumbnail ?>" alt="thumbnail" class="img-thumbnail rounded-start" />
+            <div class="thumbnail">
+                <img src=".<?= $thumbnail ?>" class="card-img-top" alt="Thumbnail" />
             </div>
-            <div class="row">
-                <p>
+            <div class="card-body">
+                <h5 class="card-title"><?= $title ?></h5>
+                <p class="card-text">
                     <?= $content ?>
+                </p>
+                <p class="card-text">
+                    <small class="text-muted">Last updated <?= $updatedAt ?></small>
                 </p>
             </div>
         </div>
