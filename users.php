@@ -1,4 +1,5 @@
 <?php
+session_start();
 require "db.php";
 
 function isValidPhoneNumber($phoneNumber)
@@ -31,37 +32,29 @@ class User
 
     static public function register($firstName, $lastName, $email, $phone, $passowrd, $role = 'regular')
     {
+        $errors = [];
         # Validation
-        if (empty($firstName)) {
-            header("location:signup.php?error=Empty First Name Field");
-            return null;
-        }
-        if (empty($lastName)) {
-            header("location:signup.php?error=Empty Last Name Field");
-            return null;
-        }
-        if (empty($email)) {
-            header("location:signup.php?error=Empty Email Field");
-            return null;
-        }
-        if (filter_var($email, FILTER_VALIDATE_EMAIL) == false) {
-            header("location:signup.php?error=Invalid Email Address");
-            return null;
-        }
-        if (empty($phone)) {
-            header("location:signup.php?error=Empty Phone Number Field");
-            return null;
-        }
-        if (isValidPhoneNumber($phone) == false) {
-            header("location:signup.php?error=Invalid Phone Number");
-            return null;
-        }
-        if (empty($passowrd)) {
-            header("location:signup.php?error=Empty Password Field");
-            return null;
-        }
-        if (empty($role)) {
-            header("location:signup.php?error=No Role");
+        if (empty($firstName))
+            $errors['firstName'] = 'You must provide a first name';
+        if (empty($lastName))
+            $errors['lastName'] = 'You must provide a last name';
+        if (empty($email))
+            $errors['email'] = 'You must provide an email';
+        else if (filter_var($email, FILTER_VALIDATE_EMAIL) == false)
+            $errors['email'] = 'Invalid email Address';
+        if (empty($phone))
+            $errors['phone'] = 'You must provide a phone number';
+        else if (isValidPhoneNumber($phone) == false)
+            $errors['phone'] = 'Invalid phone number';
+        if (empty($passowrd))
+            $errors['password'] = 'You must provide a password';
+        if (empty($role))
+            $errors['role'] = 'You must provide a role';
+        
+        if (count($errors))
+        {
+            $_SESSION['errors'] = $errors;
+            header("location: login.php");
             return null;
         }
 
@@ -74,12 +67,11 @@ class User
 
         if (!$result)
             return null;
-        if (is_string(($result))) {
-            if (strpos($result, "Duplicate") !== false) {
-                header("location:signup.php?error=$result");
-                return null;
-            }
-            header("location:500.php");
+        if (is_string(($result)) && strpos($result, "Duplicate") !== false) {
+            $key = explode(" ", $result)[1]; // Duplicated field name
+            $errors[$key] =  $result;
+            $_SESSION['errors'] = $errors;
+            header("location: login.php");
             return null;
         }
 
@@ -88,8 +80,8 @@ class User
                 FROM users 
                 WHERE email = '$email'";
         $result = db_exec_query($query);
-        if (!$result) {
-            header("location:500.php");
+        var_dump(!$result->num_rows);
+        if (!$result->num_rows) {
             return null;
         }
         $userData = $result->fetch_assoc();
@@ -99,18 +91,13 @@ class User
 
     static public function login($email, $passowrd)
     {
-        if (empty($email)) {
-            header("location:login.php?error=Empty Email Field");
-            return null;
-        }
-        if (filter_var($email, FILTER_VALIDATE_EMAIL) == false) {
-            header("location:login.php?error=Invalid Email and/or Password");
-            return null;
-        }
-        if (empty($passowrd)) {
-            header("location:login.php?error=Empty Password Field");
-            return null;
-        }
+        $errors = [];
+        if (empty($email))
+            $errors['email'] = 'You must provide an email';
+        if (empty($passowrd))
+            $errors['password'] = 'You must provide a password';
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) == false)
+            $errors['email'] = 'Invalid Email Address';
 
         $hash = md5($passowrd);
         $query = "SELECT * 
@@ -119,10 +106,8 @@ class User
         $result = db_exec_query($query);
         $result = $result->fetch_assoc();
         $password = $result['password'];
-        if ($hash != $password) {
-            header("location:login.php?error=Invalid Email and/or Password");
-            return null;
-        }
+        if ($hash != $password)
+            $errors['email'] = 'Invalid Email and/or Password';
         $user = new User($result);
         return $user;
     }
