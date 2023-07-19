@@ -1,5 +1,8 @@
 <?php
-session_start();
+require_once "auth.php";
+if (!isset($_SESSION))
+	session_start();
+Auth::preventAuth();
 if (isset($_SESSION["errors"]))
 	$errors = $_SESSION["errors"];
 else
@@ -32,6 +35,11 @@ unset($_SESSION['errors']);
 			.h-custom {
 				height: 100%;
 			}
+
+			.banner {
+				width: 75%;
+				height: 75%;
+			}
 		}
 	</style>
 </head>
@@ -40,8 +48,8 @@ unset($_SESSION['errors']);
 	<section class="vh-100">
 		<div class="container-fluid h-custom">
 			<div class="row d-flex justify-content-center align-items-center h-100">
-				<div class="col-md-9 col-lg-6 col-xl-5">
-					<img src="assets/imgs/banner.webp" class="img-fluid" alt="Sample image">
+				<div class="col-md-9 col-lg-6 col-xl-5 d-flex justify-content-center align-items-center">
+					<img src="assets/imgs/banner.webp" class="img-fluid banner" alt="Sample image">
 				</div>
 				<div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
 					<h1 class="pb-4">Signup</h1>

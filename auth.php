@@ -1,6 +1,7 @@
 <?php
-session_start();
-require "db.php";
+if (!isset($_SESSION))
+    session_start();
+require_once("db.php");
 
 
 
@@ -70,8 +71,46 @@ class User
 
 class Auth
 {
+    // Privilages
+    static public function isAuth()
+    {
+        // Returns the user it he is authenticated
+        if (isset($_SESSION["user"]))
+            return unserialize($_SESSION["user"]);
+        else
+            return null;
+    }
+
+    static public function AuthOnly()
+    {
+        // Prevent not authenticated user from entering some page
+        if (!isset($_SESSION["user"]))
+            header("location: login.php");
+    }
+
+    static public function AdminOnly()
+    {
+        // Prevent non admins user from entering some page
+        if (isset($_SESSION["user"]))
+            $user = unserialize($_SESSION["user"]);
+        if ($user['role'] != 'admin')
+            header("location: index.php");
+        else
+            header("location: login.php");
+    }
+
+    static public function preventAuth()
+    {
+        // Prevent authenticated user from entering signup pages
+        if (isset($_SESSION["user"]))
+            header("location: index.php");
+    }
+
+
+
     static public function register($firstName, $lastName, $email, $phone, $passowrd, $role = 'regular')
     {
+        Auth::preventAuth();
         $errors = [];
         # Validation
         if (empty($firstName))
@@ -104,7 +143,6 @@ class Auth
                 VALUES ('$firstName', '$lastName', '$email', '$hash','$phone');";
         $result = db_exec_query($query, "INSERT");
 
-        var_dump($result);
         if (!$result)
             return null;
         if (is_string(($result)) && strpos($result, "Duplicate") !== false) {
@@ -118,15 +156,16 @@ class Auth
         $id = $result;
         $user = new User($id, $firstName, $lastName, $email, $phone, $role);
         $_SESSION["user"] = serialize($user);
+        unset($_SESSION['errors']);
         header("location: index.php");
         return $user;
     }
 
     static public function login($email, $password)
     {
+        Auth::preventAuth();
         $errors = [];
         $_SESSION['errors'] = $errors;
-        $_SESSION["user"] = null;
         if (empty($email))
             $errors['email'] = 'You must provide an email';
         else if (filter_var($email, FILTER_VALIDATE_EMAIL) == false)
@@ -162,6 +201,7 @@ class Auth
             $result['picture']
         );
         $_SESSION["user"] = serialize($user);
+        unset($_SESSION['errors']);
         header("location: index.php");
         return $user;
     }

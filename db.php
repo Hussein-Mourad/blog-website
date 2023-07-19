@@ -8,7 +8,7 @@ function db_exec_query($query, $type = "SELECT")
         $result = $conn->query($query);
         if (!$result)
             throw new mysqli_sql_exception($conn->error);
-        if ($type == "SELECT") 
+        if ($type == "SELECT")
             return $result;
         else
             return $conn->insert_id;

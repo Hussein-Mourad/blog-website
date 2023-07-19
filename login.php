@@ -1,5 +1,8 @@
 <?php
-session_start();
+require_once("auth.php");
+if (!isset($_SESSION))
+	session_start();
+Auth::preventAuth();
 if (isset($_SESSION["errors"]))
 	$errors = $_SESSION["errors"];
 else
