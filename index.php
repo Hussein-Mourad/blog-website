@@ -1,7 +1,8 @@
 <?php
-require_once "./controllers/auth.php";
-require_once "./controllers/posts.php";
-require_once "utils.php";
+
+require_once __DIR__ . '/controllers/auth.php';
+require_once __DIR__ . '/controllers/posts.php';
+require_once __DIR__ . "/utils.php";
 $user = Auth::isAuth();
 $posts = Post::getAllPosts();
 ?>
@@ -52,9 +53,17 @@ $posts = Post::getAllPosts();
                     <li class="nav-item">
                         <a class="nav-link" href="#">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="createPost.php">Add Post</a>
-                    </li>
+
+                    <?php
+                    if ($user) {
+                    ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="createPost.php">Add Post</a>
+                        </li>
+                    <?php
+                    }
+                    ?>
+
                 </ul>
                 <!-- Left links -->
 
@@ -62,7 +71,7 @@ $posts = Post::getAllPosts();
                     <?php
                     if ($user) {
                     ?>
-                        <a href="handleLogout.php">
+                        <a href="forms/handleLogout.php">
                             <button type="button" class="btn btn-primary px-3 me-2">
                                 Logout
                             </button>

@@ -1,5 +1,10 @@
 <?php
-require_once "controllers/categories.php";
+
+require_once __DIR__. '/controllers/auth.php';
+require_once __DIR__. '/controllers/categories.php';
+require_once __DIR__. '/utils.php';
+
+$user = Auth::isAuth();
 $categories = Category::getAllCategories();
 if (isset($_SESSION['upload_result']['error']))
     $upload_error = $_SESSION['upload_result']['error'];
@@ -10,6 +15,7 @@ if (isset($_SESSION['errors']))
 unset($_SESSION['upload_result']);
 unset($_SESSION['errors']);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,73 +23,147 @@ unset($_SESSION['errors']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Post</title>
-    <link rel="stylesheet" href="assets/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="assets/fontawesome-free-6.0.0-web/css/all.min.css" />
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+    <!-- MDB -->
+    <link rel="stylesheet" href="assets/mdb5/css/mdb.min.css" />
 </head>
 
 <body>
-    <div class="container m-5 p-5">
-        <form action="handleCreatePost.php" method="post" enctype="multipart/form-data">
-            <h2 class="mb-3">Add New Post</h2>
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input name="title" type="text" class="form-control" id="title" placeholder="Enter Post Title" required>
-                <?php
-                if (isset($errors["title"])) {
-                ?>
-                    <small class="text-danger" for="title"><?= $errors["title"] ?></small>
-                <?php
-                }
-                ?>
-                <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-            </div>
-            <div class="form-group">
-                <label for="content">Content</label>
-                <textarea name="content" class="form-control" id="content" rows="3" placeholder="Enter Post Content" required></textarea>
-                <?php
-                if (isset($errors["content"])) {
-                ?>
-                    <small class="text-danger" for="content"><?= $errors["content"] ?></small>
-                <?php
-                }
-                ?>
-            </div>
-            <div class="form-group">
-                <label for="category">Category</label>
-                <select name="category" class="form-control" id="category">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+
+        <!-- Container wrapper -->
+        <div class="container">
+            <!-- Navbar brand -->
+            <a class="navbar-brand me-2" href="https://mdbgo.com/">
+                <img src="assets/imgs/mdb-transaprent-noshadows.webp" height="16" alt="MDB Logo" loading="lazy" style="margin-top: -1px;" />
+            </a>
+
+            <!-- Toggle button -->
+            <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarButtonsExample" aria-controls="navbarButtonsExample" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Collapsible wrapper -->
+            <div class="collapse navbar-collapse" id="navbarButtonsExample">
+                <!-- Left links -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <?php
-                    foreach ($categories as $key => $category) {
-                        $id = $category[0];
-                        $name = $category[1];
+                    if ($user && $user->getRole() === 'admin') {
                     ?>
-                        <option value="<?= $id ?>"><?= $name ?> </option>
+                        <li class="nav-item">
+                            <a class="nav-link" href="dashboard.php">Dashboard</a>
+                        </li>
                     <?php
                     }
                     ?>
-                </select>
-                <?php
-                if (isset($errors["category"])) {
-                ?>
-                    <small class="text-danger" for="category"><?= $errors["category"] ?></small>
-                <?php
-                }
-                ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="createPost.php">Add Post</a>
+                    </li>
+                </ul>
+                <!-- Left links -->
+
+                <div class="d-flex align-items-center">
+                    <?php
+                    if ($user) {
+                    ?>
+                        <a href="forms/handleLogout.php">
+                            <button type="button" class="btn btn-primary px-3 me-2">
+                                Logout
+                            </button>
+                        </a>
+                    <?php
+                    } else {
+                    ?>
+                        <a href="login.php">
+                            <button type="button" class="btn btn-link px-3 me-2">
+                                Login
+                            </button>
+                        </a>
+                        <a href="signup.php">
+                            <button type="button" class="btn btn-primary me-3">
+                                Signup
+                            </button>
+                        </a>
+                    <?php
+                    }
+                    ?>
+                </div>
             </div>
-            <div class="form-group my-4">
-                <label for="thumbnail">Upload Thumbnail</label>
-                <input name="thumbnail" type="file" class="form-control-file" id="thumbnail">
-                <?php
-                if ($upload_error) {
-                ?>
-                    <small class="text-danger" for="thumbnail"><?= $upload_error ?></small>
-                <?php
-                }
-                ?>
-            </div>
-            <input name="submit" type="submit" class="btn btn-primary mt-3" value="Add Post" />
-        </form>
-    </div>
+            <!-- Collapsible wrapper -->
+        </div>
+        <!-- Container wrapper -->
+    </nav>
+    <section class="container p-5">
+
+        <div>
+            <form action="forms/handleCreatePost.php" method="post" enctype="multipart/form-data">
+                <h2 class="mb-4">Add New Post</h2>
+                <div class="form-group mb-3">
+                    <label for="title">Title</label>
+                    <input name="title" type="text" class="form-control" id="title" placeholder="Enter Post Title" required>
+                    <?php
+                    if (isset($errors["title"])) {
+                    ?>
+                        <small class="text-danger" for="title"><?= $errors["title"] ?></small>
+                    <?php
+                    }
+                    ?>
+                    <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+                </div>
+                <div class="form-group mb-3">
+                    <label for="content">Content</label>
+                    <textarea name="content" class="form-control" id="content" rows="3" placeholder="Enter Post Content" required></textarea>
+                    <?php
+                    if (isset($errors["content"])) {
+                    ?>
+                        <small class="text-danger" for="content"><?= $errors["content"] ?></small>
+                    <?php
+                    }
+                    ?>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="category">Category</label>
+                    <select name="category" class="form-control" id="category">
+                        <?php
+                        foreach ($categories as $key => $category) {
+                            $id = $category[0];
+                            $name = $category[1];
+                        ?>
+                            <option value="<?= $id ?>"><?= $name ?> </option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                    <?php
+                    if (isset($errors["category"])) {
+                    ?>
+                        <small class="text-danger" for="category"><?= $errors["category"] ?></small>
+                    <?php
+                    }
+                    ?>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="thumbnail" class="form-label">Upload Post Thumbnail</label>
+                    <input name="thumbnail" type="file" class="form-control" id="thumbnail">
+                    <?php
+                    if ($upload_error) {
+                    ?>
+                        <small class="text-danger" for="thumbnail"><?= $upload_error ?></small>
+                    <?php
+                    }
+                    ?>
+                </div>
+                <input name="submit" type="submit" class="btn btn-primary" value="Add Post" />
+            </form>
+        </div>
+    </section>
 </body>
 
 </html>
-
-

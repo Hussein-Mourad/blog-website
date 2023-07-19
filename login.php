@@ -1,5 +1,7 @@
 <?php
-require_once("./controllers/auth.php");
+
+require_once __DIR__ . '/controllers/auth.php';
+
 if (!isset($_SESSION))
 	session_start();
 Auth::preventAuth();
@@ -47,7 +49,7 @@ unset($_SESSION['errors']);
 				</div>
 				<div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
 					<h1 class="pb-4">Login</h1>
-					<form action="handleLogin.php" method="post">
+					<form action="forms/handleLogin.php" method="post">
 						<!-- Email input -->
 						<div class="form-outline mb-4">
 							<label class="form-label" for="emailField">Email address</label>

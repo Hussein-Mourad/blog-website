@@ -1,5 +1,5 @@
 <?php
-require_once "config.php";
+require_once __DIR__ . '/config.php';
 
 function uploadFile($fieldName)
 {
@@ -41,7 +41,8 @@ function uploadFile($fieldName)
     return isset($_SESSION['upload_result']);
 }
 
-function timeAgo($timestamp) {
+function timeAgo($timestamp)
+{
     $now = time();
     $difference = $now - $timestamp;
 

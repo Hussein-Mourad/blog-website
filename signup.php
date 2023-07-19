@@ -1,5 +1,7 @@
 <?php
-require_once "./controllers/auth.php";
+
+require_once __DIR__ . '/controllers/auth.php';
+
 if (!isset($_SESSION))
 	session_start();
 Auth::preventAuth();
@@ -53,7 +55,7 @@ unset($_SESSION['errors']);
 				</div>
 				<div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
 					<h1 class="pb-4">Signup</h1>
-					<form action="handleSignup.php" method="post">
+					<form action="forms/handleSignup.php" method="post">
 						<div class="row">
 							<div class="col-md-6 mb-4">
 								<div class="form-outline">
@@ -98,7 +100,7 @@ unset($_SESSION['errors']);
 
 						<div class="form-outline mb-4">
 							<label class="form-label" for="phoneField">Phone</label>
-							<input name="phone" type="number" id="phoneField" class="form-control form-control-lg" placeholder="Enter phone number" />
+							<input name="phone" type="text" id="phoneField" class="form-control form-control-lg" placeholder="Enter phone number" />
 							<?php
 							if (isset($errors["phone"])) {
 							?>

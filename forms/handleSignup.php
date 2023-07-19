@@ -1,5 +1,7 @@
 <?php
-require_once "../controllers/auth.php";
+
+require_once __DIR__. '/../controllers/auth.php';
+
 $firstName = $_POST['firstName'];
 $lastName = $_POST['lastName'];
 $email = $_POST['email'];
