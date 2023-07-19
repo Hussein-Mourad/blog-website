@@ -41,7 +41,22 @@ function uploadFile($fieldName)
     return isset($_SESSION['upload_result']);
 }
 
+function timeAgo($timestamp) {
+    $now = time();
+    $difference = $now - $timestamp;
 
-// $fieldName = "fileToUpload";
-// $result = uploadFile($fieldName);
-// var_dump($result);
+    if ($difference < 60) {
+        return $difference . ' seconds ago';
+    } elseif ($difference < 3600) {
+        $minutes = floor($difference / 60);
+        return $minutes . ' minutes ago';
+    } elseif ($difference < 86400) {
+        $hours = floor($difference / 3600);
+        return $hours . ' hours ago';
+    } elseif ($difference < 604800) {
+        $days = floor($difference / 86400);
+        return $days . ' days ago';
+    } else {
+        return date('Y-m-d', $timestamp); // Show the date for more than 1 week ago
+    }
+}

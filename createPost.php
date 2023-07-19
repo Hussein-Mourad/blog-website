@@ -1,5 +1,5 @@
 <?php
-require_once "categories.php";
+require_once "controllers/categories.php";
 $categories = Category::getAllCategories();
 if (isset($_SESSION['upload_result']['error']))
     $upload_error = $_SESSION['upload_result']['error'];
@@ -85,3 +85,5 @@ unset($_SESSION['errors']);
 </body>
 
 </html>
+
+

@@ -1,5 +1,5 @@
 <?php
-require_once "auth.php";
+require_once "./controllers/auth.php";
 if (!isset($_SESSION))
 	session_start();
 Auth::preventAuth();
