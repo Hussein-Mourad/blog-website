@@ -74,7 +74,7 @@ JOIN  posts_categories pc ON p.id = pc.postId
 JOIN categories c ON pc.categoryId = c.id
 ORDER BY c.id;
 
-
+select * from categories;
 
  INSERT INTO `blogs`.`posts` 
  (`id`, `authorId`, `title`, `content`) 
@@ -90,4 +90,6 @@ UPDATE `blogs`.`posts` SET `title` = 'Test Blog 3' WHERE (`id` = '14');
 
 UPDATE `blogs`.`posts` SET `title` = 'Test Blog', `content` = 'Dummy text' WHERE (`id` = '14');
 
+
+select name from categories where id =1 ;
 

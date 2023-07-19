@@ -29,41 +29,53 @@ class Post
         $this->thumbnail = $thumbnail;
     }
 
-    static function create($title, $content, $category, $thumbnail = null)
+    static function create($title, $content, $categoryId, $thumbnail = null)
     {
-        # TODO: Add category to db;
-        # TODO: Upload thumbnail
         Auth::AuthOnly();
         $user = Auth::isAuth();
         $authorId = $user->getId();
         $errors = [];
+
         # Validation
         if (empty($title))
             $errors['title'] = 'You must provide a title';
         if (empty($content))
             $errors['content'] = 'You must provide a content';
-        if (empty($category))
+        if (empty($categoryId))
             $errors['category'] = 'You must provide a category';
         if (empty($thumbnail))
             $thumbnail = null;
 
         if (count($errors)) {
             $_SESSION['errors'] = $errors;
-            // header("location: " . ADD_POST_PAGE);
+            header("location: " . ADD_POST_PAGE);
             return null;
         }
 
+        // Insert Post
         $query = " INSERT INTO posts 
                 (`authorId`, `title`, `content`, `thumbnail`) 
                 VALUES ('$authorId', '$title', '$content', '$thumbnail');";
         $result = db_exec_query($query, "INSERT");
+        if (!$result)
+            return null;
+        $postId = $result;
 
+        // Associate Post with Category
+        $query = "INSERT INTO posts_categories (`categoryId`, `postId`) VALUES ('$categoryId', '$postId');";
+        $result = db_exec_query($query, "INSERT");
         if (!$result)
             return null;
 
-        $id = $result;
-        $post = new Post($id, $authorId, $title, $content, $category, time(), $thumbnail);
-        // header("location: " . ADD_POST_PAGE);
+        // Get Category name from id
+        $query = "SELECT name FROM categories WHERE id = $categoryId;";
+        $result = db_exec_query($query, "SELECT");
+        if (!$result)
+            return null;
+        $result = $result->fetch_assoc();
+        $category = $result['name'];
+        $post = new Post($postId, $authorId, $title, $content, $category, time(), $thumbnail);
+        header("location: " . ADD_POST_PAGE);
         return $post;
     }
 
@@ -117,18 +129,19 @@ class Post
     }
 
     static function update($id, $title = null, $content = null, $thumbnail = null)
-    {   $updateString = '';
+    {
+        $updateString = '';
         if (empty($id))
             return null;
         if ($title)
-            $updateString.="`title` = '$title'";
+            $updateString .= "`title` = '$title'";
         if ($content)
-            $updateString.=", `content` = '$content'";
+            $updateString .= ", `content` = '$content'";
         if ($thumbnail)
-            $updateString.=", `thumbnail` = '$thumbnail'";
+            $updateString .= ", `thumbnail` = '$thumbnail'";
         $query = "UPDATE posts SET $updateString WHERE (`id` = $id);";
         $result = db_exec_query($query, "UPDATE");
-        var_dump ($result);
+        // var_dump($result);
         if (!$result)
             return false;
         return true;
@@ -207,4 +220,4 @@ class Post
 // $data = Post::create("Test Blog", "Dummy", "dummy");
 // var_dump($data);
 // Post::delete(12);
-Post::update(15, "Test", "Testdfjdlkfj", "dlkfjdlkfj/dfjklj");
+// Post::update(15, "Test", "Testdfjdlkfj", "dlkfjdlkfj/dfjklj");
