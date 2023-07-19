@@ -1,25 +1,90 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>Login</title>
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-        <link href="style.css" rel="stylesheet" type="text/css">
-	</head>
-	<body>
-		<div class="login">
-			<h1>Login</h1>
-			<form action="authenticate.php" method="post">
-				<label for="username">
-					<i class="fas fa-user"></i>
-				</label>
-				<input type="text" name="username" placeholder="Username" id="username">
-				<label for="password">
-					<i class="fas fa-lock"></i>
-				</label>
-				<input type="password" name="password" placeholder="Password" id="password">
-				<input type="submit" value="Login">
-			</form>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login Page</title>
+	<link rel="stylesheet" href="assets/dist/css/bootstrap.min.css">
+	<style>
+		.divider:after,
+		.divider:before {
+			content: "";
+			flex: 1;
+			height: 1px;
+			background: #eee;
+		}
+
+		.h-custom {
+			height: calc(100% - 72px);
+		}
+
+		@media (max-width: 450px) {
+			.h-custom {
+				height: 100%;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<section class="vh-100">
+		<div class="container-fluid h-custom">
+			<div class="row d-flex justify-content-center align-items-center h-100">
+				<div class="col-md-9 col-lg-6 col-xl-5">
+					<img src="assets/imgs/banner.webp" class="img-fluid" alt="Sample image">
+				</div>
+				<div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+					<form>
+						<!-- Email input -->
+						<div class="form-outline mb-4">
+							<label class="form-label" for="emailField">Email address</label>
+							<input name="email" type="email" id="emailField" class="form-control form-control-lg" placeholder="Enter a valid email address" />
+							<small class="text-danger" for="emailField"></small>
+						</div>
+
+						<!-- Password input -->
+						<div class="form-outline mb-3">
+							<label class="form-label" for="passwordField">Password</label>
+							<input name="email" id="passwordField" type="password" id="form3Example4" class="form-control form-control-lg" placeholder="Enter password" />
+							<small class="text-danger" for="passwordField"></small>
+						</div>
+						<!-- <small class="small text-danger" for="passwordField">Error not password</label> -->
+
+						<div class="text-center text-lg-start mt-4 pt-2">
+							<button type="button" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
+							<p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="#!" class="link-danger">Register</a></p>
+						</div>
+
+					</form>
+				</div>
+			</div>
 		</div>
-	</body>
+		<div class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
+			<!-- Copyright -->
+			<div class="text-white mb-3 mb-md-0">
+				Copyright © 2020. All rights reserved.
+			</div>
+			<!-- Copyright -->
+
+			<!-- Right -->
+			<div>
+				<a href="#!" class="text-white me-4">
+					<i class="fab fa-facebook-f"></i>
+				</a>
+				<a href="#!" class="text-white me-4">
+					<i class="fab fa-twitter"></i>
+				</a>
+				<a href="#!" class="text-white me-4">
+					<i class="fab fa-google"></i>
+				</a>
+				<a href="#!" class="text-white">
+					<i class="fab fa-linkedin-in"></i>
+				</a>
+			</div>
+			<!-- Right -->
+		</div>
+	</section>
+</body>
+
 </html>

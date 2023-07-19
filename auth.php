@@ -2,11 +2,6 @@
 session_start();
 require "db.php";
 
-function isValidPhoneNumber($phoneNumber)
-{
-    $pattern = "/^\+?[0-9]{1,3}-?[0-9]{3,14}$/"; // Define the regex pattern for phone number validation
-    return preg_match($pattern, $phoneNumber);
-}
 
 
 class User
@@ -19,19 +14,66 @@ class User
     private $picture;
     private $role;
 
-    public function __construct($data)
+    public function __construct($id, $firstName, $lastName, $email, $phone, $role = 'regular', $picture = null)
     {
-        $this->id = $data['id'];
-        $this->firstName = $data['firstName'];
-        $this->lastName = $data['lastName'];
-        $this->email = $data['email'];
-        $this->phone = $data['phone'];
-        $this->picture = $data['picture'];
-        $this->role = $data['role'];
+        $this->id = $id;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->email = $email;
+        $this->phone = $phone;
+        $this->picture = $picture;
+        $this->role = $role;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    public function getPicture()
+    {
+        return $this->picture;
+    }
+
+    public function setPicture($picture)
+    {
+        $this->picture = $picture;
+        return $this;
+    }
+
+    public function getRole()
+    {
+        return $this->role;
+    }
+}
+
+
+class Auth
+{
     static public function register($firstName, $lastName, $email, $phone, $passowrd, $role = 'regular')
     {
+        session_unset();
+        session_destroy();
         $errors = [];
         # Validation
         if (empty($firstName))
@@ -44,17 +86,16 @@ class User
             $errors['email'] = 'Invalid email Address';
         if (empty($phone))
             $errors['phone'] = 'You must provide a phone number';
-        else if (isValidPhoneNumber($phone) == false)
+        else if (Auth::isValidPhoneNumber($phone) == false)
             $errors['phone'] = 'Invalid phone number';
         if (empty($passowrd))
             $errors['password'] = 'You must provide a password';
         if (empty($role))
             $errors['role'] = 'You must provide a role';
-        
-        if (count($errors))
-        {
+
+        if (count($errors)) {
             $_SESSION['errors'] = $errors;
-            header("location: login.php");
+            // header("location: login.php");
             return null;
         }
 
@@ -63,34 +104,28 @@ class User
         $query = "INSERT INTO users
                 (`firstName`, `lastName`, `email`, `password`, `phone`) 
                 VALUES ('$firstName', '$lastName', '$email', '$hash','$phone');";
-        $result = db_exec_query($query);
+        $result = db_exec_query($query, "INSERT");
 
+        var_dump($result);
         if (!$result)
             return null;
         if (is_string(($result)) && strpos($result, "Duplicate") !== false) {
             $key = explode(" ", $result)[1]; // Duplicated field name
             $errors[$key] =  $result;
             $_SESSION['errors'] = $errors;
-            header("location: login.php");
+            // header("location: login.php");
             return null;
         }
 
-        # Get User Data
-        $query = "SELECT * 
-                FROM users 
-                WHERE email = '$email'";
-        $result = db_exec_query($query);
-        var_dump(!$result->num_rows);
-        if (!$result->num_rows) {
-            return null;
-        }
-        $userData = $result->fetch_assoc();
-        $user = new User($userData);
+        $id = $result;
+        $user = new User($id, $firstName, $lastName, $email, $phone, $role);
         return $user;
     }
 
     static public function login($email, $passowrd)
     {
+        session_unset();
+        session_destroy();
         $errors = [];
         if (empty($email))
             $errors['email'] = 'You must provide an email';
@@ -103,12 +138,28 @@ class User
         $query = "SELECT * 
                 FROM users 
                 WHERE email = '$email'";
-        $result = db_exec_query($query);
+        $result = db_exec_query($query, "SELECT");
         $result = $result->fetch_assoc();
+        if (!$result)
+            return null;
         $password = $result['password'];
         if ($hash != $password)
             $errors['email'] = 'Invalid Email and/or Password';
-        $user = new User($result);
+        $user = new User(
+            $result['id'],
+            $result['firstName'],
+            $result['lastName'],
+            $result['email'],
+            $result['phone'],
+            $result['role'],
+            $result['picture']
+        );
         return $user;
+    }
+
+    static private function isValidPhoneNumber($phoneNumber)
+    {
+        $pattern = "/^\+?[0-9]{1,3}-?[0-9]{3,14}$/"; // Define the regex pattern for phone number validation
+        return preg_match($pattern, $phoneNumber);
     }
 }

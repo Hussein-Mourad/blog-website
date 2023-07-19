@@ -1,6 +1,5 @@
 <?php
-session_start();
-require "users.php";
-$user= User::login("hussein3@hussein.com", "123456");
+require "auth.php";
+$user = Auth::login("hussein3@hjjussein.com", "123456");
 if ($user)
     $_SESSION["user"] = serialize($user);
