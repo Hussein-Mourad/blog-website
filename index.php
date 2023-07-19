@@ -5,6 +5,8 @@ require_once __DIR__ . '/controllers/posts.php';
 require_once __DIR__ . "/utils.php";
 $user = Auth::isAuth();
 $posts = Post::getAllPosts();
+// FIXME: A Lazy fix as php does get summer time right
+date_default_timezone_set("Asia/Riyadh");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,10 +30,7 @@ $posts = Post::getAllPosts();
         <!-- Container wrapper -->
         <div class="container">
             <!-- Navbar brand -->
-            <a class="navbar-brand me-2" href="https://mdbgo.com/">
-                <img src="assets/imgs/mdb-transaprent-noshadows.webp" height="16" alt="MDB Logo" loading="lazy" style="margin-top: -1px;" />
-            </a>
-
+            <a class="navbar-brand" href="index.php">Blogs</a>
             <!-- Toggle button -->
             <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarButtonsExample" aria-controls="navbarButtonsExample" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>
@@ -51,7 +50,7 @@ $posts = Post::getAllPosts();
                     }
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Home</a>
+                        <a class="nav-link" href="index.php">Home</a>
                     </li>
 
                     <?php
@@ -99,42 +98,23 @@ $posts = Post::getAllPosts();
         <!-- Container wrapper -->
     </nav>
     <section class="container pt-5">
-        <div class="card mb-3">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp" alt="thumbnail" class="img-fluid rounded-start" />
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">
-                            This is a wider card with supporting text below as a natural lead-in to
-                            additional content. This content is a little bit longer.
-                        </p>
-                        <p class="card-text">
-                            <small class="text-muted">Last updated 3 mins ago</small>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
         <?php
-        foreach ($posts as $key => $post) {
+        foreach ($posts ?? [] as $post) {
             $postId = $post[0];
             $title = $post[1];
             $content = $post[2];
             $thumbnail = $post[3];
-            $author = $post[4];
-            $updatedAt = timeAgo(strtotime($post[5]));
-            $category = $post[7];
-            var_dump($thumbnail);
+            $author = $post[5];
+            $updatedAt = timeAgo(strtotime($post[6]));
+            $category = $post[8];
+            $currentDateTime = date('Y-m-d H:i:s');
 
         ?>
-            <a href="">
+            <a href="post.php?id=<?= $postId ?>">
                 <div class="card mb-3">
                     <div class="row g-0">
                         <div class="col-md-4">
-                            <img src=" <?= $thumbnail ?>" alt="thumbnail" class="img-fluid rounded-start" />
+                            <img src=".<?= $thumbnail ?>" alt="thumbnail" class="img-fluid rounded-start" />
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">

@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__. '/controllers/auth.php';
-require_once __DIR__. '/controllers/categories.php';
-require_once __DIR__. '/utils.php';
+require_once __DIR__ . '/controllers/auth.php';
+require_once __DIR__ . '/controllers/categories.php';
+require_once __DIR__ . '/utils.php';
 
 $user = Auth::isAuth();
 $categories = Category::getAllCategories();
@@ -12,8 +12,13 @@ else
     $upload_error = false;
 if (isset($_SESSION['errors']))
     $errors = $_SESSION['errors'];
+if (isset($_SESSION['success']))
+    $success_msg = $_SESSION['success'];
+else
+    $success_msg = null;
 unset($_SESSION['upload_result']);
 unset($_SESSION['errors']);
+unset($_SESSION['success']);
 ?>
 
 <!DOCTYPE html>
@@ -29,6 +34,12 @@ unset($_SESSION['errors']);
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
     <!-- MDB -->
     <link rel="stylesheet" href="assets/mdb5/css/mdb.min.css" />
+    <script>
+        function removeAlert() {
+            let alert = document.querySelector("#alertSuccess");
+            alert.remove()
+        }
+    </script>
 </head>
 
 <body>
@@ -38,9 +49,7 @@ unset($_SESSION['errors']);
         <!-- Container wrapper -->
         <div class="container">
             <!-- Navbar brand -->
-            <a class="navbar-brand me-2" href="https://mdbgo.com/">
-                <img src="assets/imgs/mdb-transaprent-noshadows.webp" height="16" alt="MDB Logo" loading="lazy" style="margin-top: -1px;" />
-            </a>
+            <a class="navbar-brand" href="index.php">Blogs</a>
 
             <!-- Toggle button -->
             <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarButtonsExample" aria-controls="navbarButtonsExample" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +70,7 @@ unset($_SESSION['errors']);
                     }
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Home</a>
+                        <a class="nav-link" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="createPost.php">Add Post</a>
@@ -101,7 +110,17 @@ unset($_SESSION['errors']);
         <!-- Container wrapper -->
     </nav>
     <section class="container p-5">
-
+        <?php
+        if ($success_msg) {
+        ?>
+            <div class="alert alert-success mb-4 alert-dismissible fade show" id="alertSuccess" role="alert" data-mdb-color="primary">
+                <i class="fas fa-check me-2"></i>
+                <?= $success_msg ?>
+                <button type="button" class="btn-close ms-2" data-mdb-dismiss="alert" aria-label="Close" onclick="removeAlert()"></button>
+            </div>
+        <?php
+        }
+        ?>
         <div>
             <form action="forms/handleCreatePost.php" method="post" enctype="multipart/form-data">
                 <h2 class="mb-4">Add New Post</h2>
@@ -115,7 +134,6 @@ unset($_SESSION['errors']);
                     <?php
                     }
                     ?>
-                    <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                 </div>
                 <div class="form-group mb-3">
                     <label for="content">Content</label>
@@ -165,5 +183,6 @@ unset($_SESSION['errors']);
         </div>
     </section>
 </body>
+
 
 </html>

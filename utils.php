@@ -1,24 +1,29 @@
 <?php
 require_once __DIR__ . '/config.php';
 
-function uploadFile($fieldName)
+function uploadFile($fieldName, $savePath)
 {
     unset($_SESSION['upload_result']);
     $result = [];
     $target_file = basename($_FILES[$fieldName]["name"]);
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    $upload = true;
 
     // Check if image file is a actual image or fake image
     if (isset($_POST["submit"])) {
         $check = getimagesize($_FILES[$fieldName]["tmp_name"]);
-        if ($check === false)
+        if ($check === false) {
             $result['error'] = "File is not an image.";
+            $upload = false;
+        }
         // echo "File is an image - " . $check["mime"] . ".";
     }
 
     // Check file size if its larger than 5MB stop
-    if ($_FILES[$fieldName]["size"] > 5000000)
+    if ($_FILES[$fieldName]["size"] > 5000000) {
         $result['error'] = "Sorry, your file is too large.";
+        $upload = false;
+    }
 
     // Change file name to Unique name
     $timestamp = microtime(true);
@@ -28,23 +33,29 @@ function uploadFile($fieldName)
     if (
         $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
         && $imageFileType != "gif"
-    )
+    ) {
         $result['error'] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-    $target_file = UPLOAD_DIR . $target_file;
-    if (move_uploaded_file($_FILES[$fieldName]["tmp_name"], $target_file))
-        $result["filepath"] = $target_file;
-    else {
-        $result['error'] = "Sorry, there was an error uploading your file.";
+        $upload = false;
     }
-
+    $filename = $target_file;
+    $target_file = $savePath . "/" . $target_file;
+    if ($upload) {
+        if (move_uploaded_file($_FILES[$fieldName]["tmp_name"], $target_file))
+            $result["filename"] = $filename;
+        else {
+            $result['error'] = "Sorry, there was an error uploading your file.";
+            $upload = false;
+        }
+    }
     $_SESSION["upload_result"] = $result;
-    return isset($_SESSION['upload_result']);
+    return $upload;
 }
 
 function timeAgo($timestamp)
 {
     $now = time();
     $difference = $now - $timestamp;
+    // var_dump($now, $timestamp);
 
     if ($difference < 60) {
         return $difference . ' seconds ago';

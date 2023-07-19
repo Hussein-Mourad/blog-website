@@ -2,9 +2,9 @@
 if (!isset($_SESSION))
     session_start();
 
-require_once __DIR__. '/auth.php';
-require_once __DIR__. '/../db.php';
-require_once __DIR__. '/../config.php';
+require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/../db.php';
+require_once __DIR__ . '/../config.php';
 
 
 
@@ -75,6 +75,7 @@ class Post
         $result = $result->fetch_assoc();
         $category = $result['name'];
         $post = new Post($postId, $authorId, $title, $content, $category, time(), $thumbnail);
+        $_SESSION["success"] = "Post Created Successfully";
         header("location: ../" . ADD_POST_PAGE);
         return $post;
     }
@@ -85,6 +86,7 @@ class Post
                     p.id,
                     p.title,
                     p.content,
+                    p.thumbnail,
                     u.picture,
                     concat(u.firstName, ' ', u.lastName) as author,
                     p.updatedAt,
