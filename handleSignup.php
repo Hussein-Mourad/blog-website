@@ -9,6 +9,6 @@ if (isset($_POST['role']))
     $role = $_POST['role'];
 else
     $role = 'regular';
+var_dump ($_POST);
 $user = Auth::register($firstName, $lastName, $email, $phone, $password, $role);
-if ($user)
-    $_SESSION["user"] = serialize($user);
+

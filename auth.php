@@ -72,8 +72,6 @@ class Auth
 {
     static public function register($firstName, $lastName, $email, $phone, $passowrd, $role = 'regular')
     {
-        session_unset();
-        session_destroy();
         $errors = [];
         # Validation
         if (empty($firstName))
@@ -95,12 +93,12 @@ class Auth
 
         if (count($errors)) {
             $_SESSION['errors'] = $errors;
-            // header("location: login.php");
+            header("location: signup.php");
             return null;
         }
 
         # Insert User into DB
-        $hash = md5($passowrd);
+        $hash = password_hash($passowrd, PASSWORD_DEFAULT);
         $query = "INSERT INTO users
                 (`firstName`, `lastName`, `email`, `password`, `phone`) 
                 VALUES ('$firstName', '$lastName', '$email', '$hash','$phone');";
@@ -113,38 +111,47 @@ class Auth
             $key = explode(" ", $result)[1]; // Duplicated field name
             $errors[$key] =  $result;
             $_SESSION['errors'] = $errors;
-            // header("location: login.php");
+            header("location: login.php");
             return null;
         }
 
         $id = $result;
         $user = new User($id, $firstName, $lastName, $email, $phone, $role);
+        $_SESSION["user"] = serialize($user);
+        header("location: index.php");
         return $user;
     }
 
-    static public function login($email, $passowrd)
+    static public function login($email, $password)
     {
-        session_unset();
-        session_destroy();
         $errors = [];
+        $_SESSION['errors'] = $errors;
+        $_SESSION["user"] = null;
         if (empty($email))
             $errors['email'] = 'You must provide an email';
-        if (empty($passowrd))
-            $errors['password'] = 'You must provide a password';
-        if (filter_var($email, FILTER_VALIDATE_EMAIL) == false)
+        else if (filter_var($email, FILTER_VALIDATE_EMAIL) == false)
             $errors['email'] = 'Invalid Email Address';
+        if (empty($password))
+            $errors['password'] = 'You must provide a password';
 
-        $hash = md5($passowrd);
+        if (count($errors)) {
+            $_SESSION['errors'] = $errors;
+            header("location: login.php");
+            return null;
+        }
+
         $query = "SELECT * 
                 FROM users 
                 WHERE email = '$email'";
         $result = db_exec_query($query, "SELECT");
         $result = $result->fetch_assoc();
-        if (!$result)
+        if (!$result || !password_verify($password, $result['password'])) {
+            $errors['email_password'] = 'Invalid Email and/or Password';
+            $_SESSION['errors'] = $errors;
+            header("location: login.php");
             return null;
-        $password = $result['password'];
-        if ($hash != $password)
-            $errors['email'] = 'Invalid Email and/or Password';
+        }
+
         $user = new User(
             $result['id'],
             $result['firstName'],
@@ -154,6 +161,8 @@ class Auth
             $result['role'],
             $result['picture']
         );
+        $_SESSION["user"] = serialize($user);
+        header("location: index.php");
         return $user;
     }
 
