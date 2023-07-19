@@ -100,18 +100,30 @@ class User
     static public function login($email, $passowrd)
     {
         if (empty($email)) {
+            header("location:login.php?error=Empty Email Field");
+            return null;
         }
-
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) == false) {
+            header("location:login.php?error=Invalid Email and/or Password");
+            return null;
+        }
         if (empty($passowrd)) {
+            header("location:login.php?error=Empty Password Field");
+            return null;
         }
 
         $hash = md5($passowrd);
-
         $query = "SELECT * 
                 FROM users 
                 WHERE email = '$email'";
         $result = db_exec_query($query);
         $result = $result->fetch_assoc();
-        return $result;
+        $password = $result['password'];
+        if ($hash != $password) {
+            header("location:login.php?error=Invalid Email and/or Password");
+            return null;
+        }
+        $user = new User($result);
+        return $user;
     }
 }

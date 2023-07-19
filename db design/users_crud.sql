@@ -1,5 +1,5 @@
 select * from users;
-
+select * from users where email = "test@gmail.com";
 select id, firstName, lastName, email, role, phone, picture
 from users 
 where id = 1;
@@ -13,5 +13,5 @@ SET picture = '/mnt/d/test/test.png'
 WHERE id = 1;
 
 DELETE FROM users 
-where id = 4 
+where id = 9 
 limit 1 
