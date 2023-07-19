@@ -10,6 +10,8 @@ function db_exec_query($query, $type = "SELECT")
             throw new mysqli_sql_exception($conn->error);
         if ($type == "SELECT")
             return $result;
+        else if ($type == "DELETE" || $type == "UPDATE")
+            return mysqli_affected_rows($conn);
         else
             return $conn->insert_id;
     } catch (mysqli_sql_exception $e) {

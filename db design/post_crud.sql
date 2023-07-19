@@ -81,10 +81,13 @@ ORDER BY c.id;
  VALUES ('4', '2', 'Test Blog 4', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.');
 
 select * from posts;
+delete from posts where id =11;
 
 INSERT INTO `blogs`.`posts_categories` (`categoryId`, `postId`) VALUES ('2', '3');
 
 
+UPDATE `blogs`.`posts` SET `title` = 'Test Blog 3' WHERE (`id` = '14');
 
+UPDATE `blogs`.`posts` SET `title` = 'Test Blog', `content` = 'Dummy text' WHERE (`id` = '14');
 
 

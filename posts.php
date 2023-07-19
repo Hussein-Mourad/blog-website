@@ -31,6 +31,8 @@ class Post
 
     static function create($title, $content, $category, $thumbnail = null)
     {
+        # TODO: Add category to db;
+        # TODO: Upload thumbnail
         Auth::AuthOnly();
         $user = Auth::isAuth();
         $authorId = $user->getId();
@@ -47,7 +49,7 @@ class Post
 
         if (count($errors)) {
             $_SESSION['errors'] = $errors;
-            header("location: " . ADD_POST_PAGE);
+            // header("location: " . ADD_POST_PAGE);
             return null;
         }
 
@@ -61,11 +63,11 @@ class Post
 
         $id = $result;
         $post = new Post($id, $authorId, $title, $content, $category, time(), $thumbnail);
-        header("location: " . ADD_POST_PAGE);
+        // header("location: " . ADD_POST_PAGE);
         return $post;
     }
 
-    static function getPosts()
+    static function getAllPosts()
     {
         $query = "SELECT
                     p.id,
@@ -82,25 +84,63 @@ class Post
                 JOIN categories c ON pc.categoryId = c.id
                 ORDER BY c.id;";
         $result = db_exec_query($query, "SELECT");
-        var_dump($result);
-
         if (!$result)
             return null;
-
-        $id = $result;
-        $post = new Post($id, $authorId, $title, $content, time());
-        header("location: " . ADD_POST_PAGE);
-        return $post;
+        if (!$result->num_rows)
+            return null;
+        return  $result->fetch_all();
     }
 
-    static function update($title, $content, $thumbnail = null)
+    static function getPost($id)
     {
-        // TODO: update;
+        $query = "SELECT
+                    p.id,
+                    p.title,
+                    p.content,
+                    u.picture,
+                    concat(u.firstName, ' ', u.lastName) as author,
+                    p.updatedAt,
+                    c.id as category_id,
+                    c.name as category
+                FROM posts p
+                JOIN users u ON u.id = p.authorId
+                JOIN  posts_categories pc ON p.id = pc.postId
+                JOIN categories c ON pc.categoryId = c.id
+                WHERE p.id = $id
+                ORDER BY c.id;";
+        $result = db_exec_query($query, "SELECT");
+        if (!$result)
+            return null;
+        if (!$result->num_rows)
+            return null;
+        return  $result->fetch_assoc();
     }
 
-    static function delete($title, $content, $thumbnail = null)
+    static function update($id, $title = null, $content = null, $thumbnail = null)
+    {   $updateString = '';
+        if (empty($id))
+            return null;
+        if ($title)
+            $updateString.="`title` = '$title'";
+        if ($content)
+            $updateString.=", `content` = '$content'";
+        if ($thumbnail)
+            $updateString.=", `thumbnail` = '$thumbnail'";
+        $query = "UPDATE posts SET $updateString WHERE (`id` = $id);";
+        $result = db_exec_query($query, "UPDATE");
+        var_dump ($result);
+        if (!$result)
+            return false;
+        return true;
+    }
+
+    static function delete($id)
     {
-        // TODO: CREATE;
+        $query = "DELETE FROM posts WHERE id = $id";
+        $result = db_exec_query($query, "DELETE");
+        if (!$result)
+            return false;
+        return true;
     }
 
     public function getId()
@@ -164,4 +204,7 @@ class Post
     }
 }
 
-Post::getPosts();
+// $data = Post::create("Test Blog", "Dummy", "dummy");
+// var_dump($data);
+// Post::delete(12);
+Post::update(15, "Test", "Testdfjdlkfj", "dlkfjdlkfj/dfjklj");

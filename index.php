@@ -3,7 +3,7 @@ require_once "auth.php";
 $user = Auth::isAuth();
 if ($user)
     $user = $_SESSION["user"];
-var_dump ($user);
+var_dump($user);
 // var_dump($errors);
 // unset($_SESSION['errors']);
 ?>
@@ -21,10 +21,22 @@ var_dump ($user);
     <a href="signup.php">Signup</a>
     <a href="handleLogout.php">Logout</a>
 
+
+    <form action="handleCreatePost.php" method="post" enctype="multipart/form-data">
+
+        Select image to upload:
+        <input type="file" name="fileToUpload" id="fileToUpload">
+        <input type="submit" value="Upload Image" name="submit">
+    </form>
+
     <?php
     $filename = "test.jpg";
-    $timestampWithMicroseconds = microtime(true);
-    // echo md5($timestampWithMicroseconds . "_".  $filename);    
+    $pathinfo = pathinfo($filename);
+    $fileName = $pathinfo['filename'];
+    $fileExtension = $pathinfo['extension'];
+    $timestamp = microtime(true);
+    $target_file = md5($timestamp . "_" .  $fileName) . "." . $fileExtension;
+    var_dump($target_file);
     ?>
 
 
