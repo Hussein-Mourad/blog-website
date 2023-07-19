@@ -102,12 +102,12 @@ date_default_timezone_set("Asia/Riyadh");
         foreach ($posts ?? [] as $post) {
             $postId = $post[0];
             $title = $post[1];
-            $content = $post[2];
+            $content = truncateText($post[2], 300);
             $thumbnail = $post[3];
             $author = $post[5];
             $updatedAt = timeAgo(strtotime($post[6]));
             $category = $post[8];
-            $currentDateTime = date('Y-m-d H:i:s');
+
 
         ?>
             <a href="post.php?id=<?= $postId ?>">

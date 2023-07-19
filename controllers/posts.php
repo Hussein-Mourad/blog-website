@@ -111,6 +111,7 @@ class Post
                     p.id,
                     p.title,
                     p.content,
+                    p.thumbnail,
                     u.picture,
                     concat(u.firstName, ' ', u.lastName) as author,
                     p.updatedAt,

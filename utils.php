@@ -72,3 +72,12 @@ function timeAgo($timestamp)
         return date('Y-m-d', $timestamp); // Show the date for more than 1 week ago
     }
 }
+
+
+function truncateText($text, $length, $ellipsis = '...') {
+    if (mb_strlen($text) <= $length) {
+        return $text;
+    } else {
+        return mb_substr($text, 0, $length) . $ellipsis;
+    }
+}
