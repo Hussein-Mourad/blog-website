@@ -74,7 +74,7 @@ unset($_SESSION['success']);
                     <?php
                     if ($user) {
                     ?>
-                        <a href="forms/handleLogout.php">
+                        <a href="forms/auth/handleLogout.php">
                             <button type="button" class="btn btn-primary px-3 me-2">
                                 Logout
                             </button>
@@ -114,7 +114,7 @@ unset($_SESSION['success']);
         }
         ?>
         <div>
-            <form action="forms/handleCreatePost.php" method="post" enctype="multipart/form-data">
+            <form action="forms/posts/handleCreatePost.php" method="post" enctype="multipart/form-data">
                 <h2 class="mb-4">Add New Post</h2>
                 <div class="form-group mb-3">
                     <label for="title">Title</label>

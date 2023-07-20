@@ -12,7 +12,7 @@
                                 <textarea name="content" class="d-none" id="content"><?= $content ?></textarea>
                                 <button class="btn btn-lg btn-primary px-4">Edit</button>
                             </form>
-                            <form action="forms/handleDeletePost.php" method="post">
+                            <form action="forms/posts/handleDeletePost.php" method="post">
                                 <input name="id" value="<?= $postId ?>" type="hidden" />
                                 <button class=" btn btn-lg btn-danger" type="submit">Delete</button>
                             </form>
@@ -37,16 +37,6 @@
                     </p>
                 </div>
                 <hr>
-                <div class="d-flex align-items-center">
-                    <button class="me-3 mb-0 btn btn-link">
-                        <i class="fa-regular fa-thumbs-up"></i> Like
-                    </button>
-                    <button class="mb-0 btn btn-link">
-                        <i class="fa-regular fa-comment"></i> Comment
-                    </button>
-                </div>
-                <hr>
-
                 <div class="thumbnail">
                     <img src=".<?= $thumbnail ?>" class="card-img-top" alt="Thumbnail" />
                 </div>

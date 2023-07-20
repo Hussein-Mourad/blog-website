@@ -5,11 +5,11 @@ require_once __DIR__ . '/controllers/comments.php';
 require_once __DIR__ . "/utils.php";
 $user = Auth::isAuth();
 if (!isset($_GET["id"]))
-    header("location: index.php");
+    redirect("index.php");
 $id = $_GET['id'];
 $post = Post::getPost($id);
 if (!$post)
-    header("location: index.php");
+    redirect("index.php");
 $comments = Comment::getAllPostComments($id);
 $postId = $post["id"];
 $title = $post['title'];

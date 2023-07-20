@@ -52,7 +52,7 @@ unset($_SESSION['errors']);
 				</div>
 				<div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
 					<h1 class="pb-4">Signup</h1>
-					<form action="forms/handleSignup.php" method="post">
+					<form action="forms/auth/handleSignup.php" method="post">
 						<div class="row">
 							<div class="col-md-6 mb-4">
 								<div class="form-group">

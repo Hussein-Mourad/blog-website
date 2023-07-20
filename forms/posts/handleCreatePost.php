@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../utils.php';
-require_once __DIR__ . '/../controllers/posts.php';
-require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../../utils.php';
+require_once __DIR__ . '/../../controllers/posts.php';
+require_once __DIR__ . '/../../config.php';
 
 if (!isset($_SESSION))
     session_start();
@@ -22,7 +22,7 @@ if ($isThumbnail) {
         $filename =  $_SESSION["upload_result"]["filename"];
         $filepath = "/" . UPLOAD_DIR . "/" . $filename;
     } else {
-        header("location: ../" . ADD_POST_PAGE);
+        header("location: ../../" . ADD_POST_PAGE);
         die("Invaild Upload");
     }
 }

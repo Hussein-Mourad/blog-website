@@ -49,7 +49,7 @@ unset($_SESSION['errors']);
 				</div>
 				<div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
 					<h1 class="pb-4">Login</h1>
-					<form action="forms/handleLogin.php" method="post">
+					<form action="forms/auth/handleLogin.php" method="post">
 						<!-- Email input -->
 						<div class="form-group mb-4">
 							<label class="form-label" for="emailField">Email address</label>

@@ -74,10 +74,20 @@ function timeAgo($timestamp)
 }
 
 
-function truncateText($text, $length, $ellipsis = '...') {
+function truncateText($text, $length, $ellipsis = '...')
+{
     if (mb_strlen($text) <= $length) {
         return $text;
     } else {
         return mb_substr($text, 0, $length) . $ellipsis;
     }
+}
+
+// Redirect to a page relative to server root
+function redirect($page)
+{
+    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
+    $serverName = $_SERVER['SERVER_NAME'];
+    $baseUrl = $protocol . $serverName;
+    header("location : $baseUrl . $page");
 }

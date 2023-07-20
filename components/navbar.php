@@ -44,7 +44,7 @@
                  <?php
                     if ($user) {
                     ?>
-                     <a href="forms/handleLogout.php">
+                     <a href="forms/auth/handleLogout.php">
                          <button type="button" class="btn btn-primary px-3 me-2">
                              Logout
                          </button>
