@@ -44,6 +44,46 @@ LEFT JOIN comment_hierarchy ch ON p.id = ch.postId
 ORDER BY p.id, ch.id;
 
 
+SELECT 
+    *
+FROM
+    comments c
+        JOIN
+    posts p ON p.id = c.postId
+WHERE
+    p.id = 51;
+    
+    
+    
+SELECT 
+	c.postId,
+    c.parentId,
+    c.id AS comment_id,
+    c.content AS comment_text,
+    r.id AS reply_id,
+    r.content AS reply_text
+FROM
+    comments c
+        JOIN
+    comments r ON c.id = r.parentId
+WHERE c.postId = 53 and c.parentId IS NULL;
+
+SELECT 
+    c.id,
+    c.postId,
+    c.userId,
+    c.parentId,
+    c.content,
+    c.updatedAt,
+    CONCAT(u.firstName, ' ', u.lastName) as username,
+    u.picture AS avatar
+FROM
+    comments c
+        JOIN
+    users u ON u.id = c.userId
+WHERE
+    c.postId = 53
+ORDER BY c.parentId;
 
 
 
