@@ -13,8 +13,12 @@ $postId = $post["id"];
 $title = $post['title'];
 $content = $post['content'];
 $thumbnail = $post['thumbnail'];
+$avatar = $post['picture'];
+if (empty($avatar))
+    $avatar = "/assets/imgs/default-avatar.jpg";
 if (empty($thumbnail))
     $thumbnail = "/assets/imgs/default_image.png";
+$authorId = $post['authorId'];
 $author = $post['author'];
 $updatedAt = timeAgo(strtotime($post['updatedAt']));
 $category = $post['category'];
@@ -120,22 +124,75 @@ $category = $post['category'];
     </nav>
     <section class="container pt-5">
         <div class="card mb-3">
-            <div class="row">
+
+            <!-- <div class="row">
                 <div class="col-md-4 position-relative overflow-hidden d-flex justify-content-center align-items-center">
                     <img src=".<?= $thumbnail ?>" alt="thumbnail" class="img-fluid rounded-start position-absolute w-100, h-100 object-cover" />
                 </div>
-            </div>
-            <div class="thumbnail">
+            </div> -->
+
+
+            <!-- <div class="thumbnail">
                 <img src=".<?= $thumbnail ?>" class="card-img-top" alt="Thumbnail" />
-            </div>
+            </div> -->
             <div class="card-body">
-                <h5 class="card-title"><?= $title ?></h5>
-                <p class="card-text">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h1 class="card-title mb-3"><?= $title ?></h1>
+
+
+                    <?php
+                    if ($user->getId() == $authorId || $user->getRole() == 'admin') {
+                    ?>
+                        <div class="d-flex">
+                            <form method="post" action="editPost.php" class="me-2">
+                                <input name="id" value="<?= $postId ?>" type="hidden" />
+                                <textarea name="title" class="d-none" id="text"><?= addslashes($title) ?></textarea>
+                                <textarea name="content" class="d-none" id="content"><?= $content ?></textarea>
+                                <button class="btn btn-lg btn-primary px-4">Edit</button>
+                            </form>
+                            <form action="forms/handleDeletePost.php" method="post">
+                                <input name="id" value="<?= $postId ?>" type="hidden" />
+                                <button class=" btn btn-lg btn-danger" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-end">
+                        <div class="me-3">
+                            <img src=".<?= $avatar ?>" class="rounded-circle mb-3" style="width: 50px;" alt="Avatar" />
+                        </div>
+                        <div>
+                            <h6 class="mb-0"><strong><?= $author ?></strong></h6>
+                            <p class="text-muted">Author</p>
+                        </div>
+                    </div>
+
+                    <p class="card-text">
+                        <small class="text-muted">Last updated <?= $updatedAt ?></small>
+                    </p>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div>React Comment</div>
+                        <!-- <div>Comment</div> -->
+                    </div>
+
+
+                </div>
+                <hr>
+
+                <div class="thumbnail">
+                    <img src=".<?= $thumbnail ?>" class="card-img-top" alt="Thumbnail" />
+                </div>
+
+                <p class="card-text mt-3">
                     <?= $content ?>
                 </p>
-                <p class="card-text">
-                    <small class="text-muted">Last updated <?= $updatedAt ?></small>
-                </p>
+
             </div>
         </div>
     </section>

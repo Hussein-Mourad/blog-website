@@ -112,6 +112,7 @@ class Post
     {
         $query = "SELECT
                     p.id,
+                    p.authorId,
                     p.title,
                     p.content,
                     p.thumbnail,
@@ -140,9 +141,14 @@ class Post
         if (empty($id))
             return null;
         if ($title)
-            $updateString .= "`title` = '$title'";
-        if ($content)
-            $updateString .= ", `content` = '$content'";
+        {
+            $escaped_title = addslashes($title);
+            $updateString .= "`title` = '$escaped_title'";
+        }
+        if ($content) {
+            $escaped_content = addslashes($content);
+            $updateString .= ", `content` = '$escaped_content'";
+        }
         if ($thumbnail)
             $updateString .= ", `thumbnail` = '$thumbnail'";
         $query = "UPDATE posts SET $updateString WHERE (`id` = $id);";
