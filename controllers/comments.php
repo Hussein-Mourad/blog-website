@@ -17,10 +17,12 @@ class Comment
     public $updatedAt;
     public $username;
     public $avatar;
-    public $replies;
+    public $replies = [];
 
     public function __construct($id, $postId, $userId, $content, $updatedAt, $username, $avatar)
     {
+        if (empty($avatar))
+            $avatar = "/assets/imgs/default-avatar.jpg";
         $this->id = $id;
         $this->postId = $postId;
         $this->userId = $userId;
@@ -28,6 +30,7 @@ class Comment
         $this->updatedAt = $updatedAt;
         $this->username = $username;
         $this->avatar = $avatar;
+        $this->replies = [];
     }
 
     static function create($postId, $content, $parentCommentId = null)
@@ -83,7 +86,6 @@ class Comment
                     WHERE
                         c.postId = $postId
                     ORDER BY c.parentId;";
-
         $comments = [];
         $result = db_exec_query($query, "SELECT");
         while ($row = $result->fetch_assoc()) {
@@ -95,14 +97,7 @@ class Comment
             else
                 $comments[$id] = $comment;
         }
-        foreach ($comments as $id => $comment) {
-            foreach ($comment as $key => $value) {
-                print_r($key);
-                echo ": ";
-                print_r($value);
-                echo "<br>";
-            }
-        }
+        return $comments;
     }
 
     public function getId()
@@ -147,4 +142,5 @@ class Comment
 }
 
 // $result = Comment::create(51, "Test Reply 2", 21);
-$result = Comment::getAllPostComments(53);
+// $result = Comment::getAllPostComments(53);
+// var_dump ($result);

@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/controllers/auth.php';
 require_once __DIR__ . '/controllers/posts.php';
+require_once __DIR__ . '/controllers/comments.php';
 require_once __DIR__ . "/utils.php";
 $user = Auth::isAuth();
 if (!isset($_GET["id"]))
@@ -9,6 +10,7 @@ $id = $_GET['id'];
 $post = Post::getPost($id);
 if (!$post)
     header("location: index.php");
+$comments = Comment::getAllPostComments($id);
 $postId = $post["id"];
 $title = $post['title'];
 $content = $post['content'];
@@ -124,22 +126,9 @@ $category = $post['category'];
     </nav>
     <section class="container pt-5">
         <div class="card mb-3">
-
-            <!-- <div class="row">
-                <div class="col-md-4 position-relative overflow-hidden d-flex justify-content-center align-items-center">
-                    <img src=".<?= $thumbnail ?>" alt="thumbnail" class="img-fluid rounded-start position-absolute w-100, h-100 object-cover" />
-                </div>
-            </div> -->
-
-
-            <!-- <div class="thumbnail">
-                <img src=".<?= $thumbnail ?>" class="card-img-top" alt="Thumbnail" />
-            </div> -->
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start">
                     <h1 class="card-title mb-3"><?= $title ?></h1>
-
-
                     <?php
                     if ($user->getId() == $authorId || $user->getRole() == 'admin') {
                     ?>
@@ -160,13 +149,13 @@ $category = $post['category'];
                     ?>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-end">
+                    <div class="d-flex align-items-center">
                         <div class="me-3">
-                            <img src=".<?= $avatar ?>" class="rounded-circle mb-3" style="width: 50px;" alt="Avatar" />
+                            <img src=".<?= $avatar ?>" class="rounded-circle" style="width: 50px;" alt="Avatar" />
                         </div>
-                        <div>
+                        <div class="mt-1">
                             <h6 class="mb-0"><strong><?= $author ?></strong></h6>
-                            <p class="text-muted">Author</p>
+                            <p class="text-muted mb-0">Author</p>
                         </div>
                     </div>
 
@@ -194,6 +183,103 @@ $category = $post['category'];
                 </p>
 
             </div>
+        </div>
+        <div class="mt-4">
+            <h2 class="">Comments</h2>
+            <hr class="mb-3">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <img src=".<?= $avatar ?>" class="rounded-circle" style="width: 50px;" alt="Avatar" />
+                        </div>
+                        <div class="">
+                            <h6 class="mb-0"><strong><?= $author ?></strong></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sed facere, sequi natus illo hic iure iste eveniet deleniti? Quasi ab deleniti labore obcaecati quisquam illum velit qui, cumque quod magnam!</p>
+                    <button class="btn btn-secondary">Reply</button>
+                </div>
+            </div>
+
+            <?php
+            foreach ($comments ?? [] as $id => $comment) {
+            ?>
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <img src=".<?= $comment->avatar ?>" class="rounded-circle" style="width: 50px;" alt="<?= $comment->username ?>" />
+                            </div>
+                            <div class="">
+                                <h6 class="mb-0"><strong><?= $comment->username ?></strong></h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><?= $comment->content ?></p>
+                        <button class="btn btn-secondary">Reply</button>
+                        <form action="">
+                            <div class="mb-3">
+                                <label for="reply" class="form-label">Reply</label>
+                                <input type="hidden" name="parentId" value="">
+                                <textarea class="form-control" name="reply" id="reply" rows="3" placeholder="Enter your reply"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Reply</button>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <h3>Replies</h3>
+                        <?php
+                        foreach ($comment->replies ?? [] as $reply) {
+                        ?>
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3">
+                                            <img src=".<?= $reply->avatar ?>" class="rounded-circle" style="width: 50px;" alt="<?= $reply->username ?>" />
+                                        </div>
+                                        <div class="">
+                                            <h6 class="mb-0"><strong><?= $reply->username ?></strong></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text"><?= $reply->content ?></p>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+        <?php
+                        }
+                    }
+        ?>
+        <div class="card mb-3 ms-4">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <div class="me-3">
+                        <img src=".<?= $avatar ?>" class="rounded-circle" style="width: 50px;" alt="Avatar" />
+                    </div>
+                    <div class="">
+                        <h6 class="mb-0"><strong><?= $author ?></strong></h6>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <form action="">
+                    <div class="mb-3">
+                        <label for="reply" class="form-label">Reply</label>
+                        <input type="hidden" name="parentId" value="">
+                        <textarea class="form-control" name="reply" id="reply" rows="3" placeholder="Enter your reply"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Reply</button>
+                </form>
+            </div>
+        </div>
+        </div>
         </div>
     </section>
 </body>
