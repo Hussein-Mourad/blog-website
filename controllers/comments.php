@@ -46,7 +46,7 @@ class Comment
 
         if (count($errors)) {
             $_SESSION['errors'] = $errors;
-            header("location: ../post.php?id=" . $postId);
+            redirect("/post.php?id=" . $postId);
             return null;
         }
 
@@ -64,7 +64,7 @@ class Comment
         if (!$result)
             return null;
         $_SESSION["success"] = "Comment Created Successfully";
-        header("location: ../post.php?id=" . $postId);
+       redirect("/post.php?id=" . $postId);
     }
 
     static function getAllPostComments($postId)

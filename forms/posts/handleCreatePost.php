@@ -22,7 +22,7 @@ if ($isThumbnail) {
         $filename =  $_SESSION["upload_result"]["filename"];
         $filepath = "/" . UPLOAD_DIR . "/" . $filename;
     } else {
-        header("location: ../../" . ADD_POST_PAGE);
+        redirect("/createPost.php");
         die("Invaild Upload");
     }
 }

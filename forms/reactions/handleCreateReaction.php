@@ -9,7 +9,6 @@ if (!isset($_SESSION))
 
 $postId = $_POST['postId'];
 $type = $_POST['type'];
-$result = Reaction::create($postId,$type);
+$result = Reaction::create($postId, $type);
 var_dump($result);
-header("location: ../../post.php?id=" . $postId);
-
+redirect("/post.php?id=" . $postId);

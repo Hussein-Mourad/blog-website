@@ -13,4 +13,4 @@ $content = $_POST['content'];
 var_dump($id, $title, $content);
 $result = Post::update($id, $title, $content);
 var_dump($result);
-header("location: ../../post.php?=" . $id);
+redirect("/post.php?=" . $id);

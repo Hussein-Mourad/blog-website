@@ -42,4 +42,4 @@ class Category
 // var_dump($data);
 // Post::delete(12);
 // Post::update(15, "Test", "Testdfjdlkfj", "dlkfjdlkfj/dfjklj");
-$result = Category::getAllCategories();
+// $result = Category::getAllCategories();

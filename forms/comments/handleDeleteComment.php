@@ -11,4 +11,4 @@ $id = $_POST['id'];
 $postId = $_POST['postId'];
 $result = Comment::delete($id, $content, $parentCommentId);
 var_dump($result);
-header("location: ../../post.php?id=" . $postId);
+redirect("/post.php?id=" . $postId);

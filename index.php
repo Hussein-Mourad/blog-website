@@ -7,11 +7,6 @@ $user = Auth::isAuth();
 $posts = Post::getAllPosts();
 // FIXME: A Lazy fix as php doesn't get summer time in Egypt
 date_default_timezone_set("Asia/Riyadh");
-
-$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
-$serverName = $_SERVER['SERVER_NAME'];
-$baseUrl = $protocol . $serverName;
-var_dump ($baseUrl);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,6 +20,8 @@ var_dump ($baseUrl);
     <section class="container pt-5">
         <?php include "components/posts.php" ?>
     </section>
+    <!-- MDB -->
+    <script type="text/javascript" src="js/mdb.min.js"></script>
 </body>
 
 </html>

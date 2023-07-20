@@ -39,7 +39,7 @@ class Reaction
 
         if (count($errors)) {
             $_SESSION['errors'] = $errors;
-            header("location: ../post.php?id=" . $postId);
+            redirect("/post.php?id=" . $postId);
             return null;
         }
 

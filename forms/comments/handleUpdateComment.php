@@ -12,4 +12,4 @@ $postId = $_POST['postId'];
 $content = $_POST['content'];
 $result = Comment::update($id, $content);
 var_dump($result);
-header("location: ../../post.php?id=" . $postId);
+redirect("/post.php?id=" . $postId);

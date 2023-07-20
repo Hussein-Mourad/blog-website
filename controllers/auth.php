@@ -86,7 +86,7 @@ class Auth
     {
         // Prevent not authenticated user from entering some page
         if (!isset($_SESSION["user"]))
-            redirect("login.php");
+            redirect("/login.php");
     }
 
     static public function AdminOnly()
@@ -95,16 +95,16 @@ class Auth
         if (isset($_SESSION["user"]))
             $user = unserialize($_SESSION["user"]);
         if ($user['role'] != 'admin')
-            redirect("index.php");
+            redirect("/index.php");
         else
-            redirect("login.php");
+            redirect("/login.php");
     }
 
     static public function preventAuth()
     {
         // Prevent authenticated user from entering signup pages
         if (isset($_SESSION["user"]))
-            redirect("index.php");
+            redirect("/index.php");
     }
 
 
@@ -133,7 +133,7 @@ class Auth
 
         if (count($errors)) {
             $_SESSION['errors'] = $errors;
-            redirect("signup.php");
+            redirect("/signup.php");
             return null;
         }
 
@@ -150,7 +150,7 @@ class Auth
             $key = explode(" ", $result)[1]; // Duplicated field name
             $errors[$key] =  $result;
             $_SESSION['errors'] = $errors;
-            redirect("login.php");
+            redirect("/login.php");
             return null;
         }
 
@@ -158,7 +158,7 @@ class Auth
         $user = new User($id, $firstName, $lastName, $email, $phone, $role);
         $_SESSION["user"] = serialize($user);
         unset($_SESSION['errors']);
-        redirect("index.php");
+        redirect("/index.php");
         return $user;
     }
 
@@ -176,7 +176,7 @@ class Auth
 
         if (count($errors)) {
             $_SESSION['errors'] = $errors;
-            redirect("login.php");
+            redirect("/login.php");
             return null;
         }
 
@@ -188,7 +188,7 @@ class Auth
         if (!$result || !password_verify($password, $result['password'])) {
             $errors['email_password'] = 'Invalid Email and/or Password';
             $_SESSION['errors'] = $errors;
-            redirect("login.php");
+            redirect("/login.php");
             return null;
         }
 
@@ -203,7 +203,7 @@ class Auth
         );
         $_SESSION["user"] = serialize($user);
         unset($_SESSION['errors']);
-        redirect("index.php");
+        redirect("/index.php");
         return $user;
     }
 

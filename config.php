@@ -4,8 +4,5 @@ define("DB_HOST", "localhost");
 define("DB_USERNAME", "root");
 define("DB_PASSWORD", "");
 
+define("PROJECT_ROOT", "/blog-website");
 define("UPLOAD_DIR", "uploads/");
-
-define('ADD_POST_PAGE', 'createPost.php');
-define('LOGIN_PAGE', 'login.php');
-define('SIGNUP_PAGE', 'signup.php');

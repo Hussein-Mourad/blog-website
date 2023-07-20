@@ -6,12 +6,11 @@ require_once __DIR__ . '/utils.php';
 
 $user = Auth::isAuth();
 if (!isset($_POST['id']) && !isset($_POST["title"]) && !isset($_POST["content"]))
-    redirect("index.php");
+    redirect("/index.php");
 
 $id = $_POST['id'];
 $title = $_POST['title'];
 $content = $_POST['content'];
-var_dump ($title);
 
 if (isset($_SESSION['upload_result']['error']))
     $upload_error = $_SESSION['upload_result']['error'];
@@ -123,7 +122,7 @@ unset($_SESSION['success']);
         }
         ?>
         <div>
-            <form action="forms/posts/handleEditPost.php" method="post" enctype="multipart/form-data">
+            <form action="forms/posts/handleUpdatePost.php" method="post" enctype="multipart/form-data">
                 <input name="id" type="hidden" value="<?= $id ?>">
                 <h2 class="mb-4">Edit Post</h2>
                 <div class="form-group mb-3">

@@ -6,4 +6,4 @@ $user = Auth::AuthOnly();
 $id = $_POST['id'];
 $result = Post::delete($id);
 // var_dump ($result);
-header("location: ../../index.php");
+redirect("/index.php");

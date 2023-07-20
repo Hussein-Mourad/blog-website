@@ -12,4 +12,5 @@ $content = $_POST['content'];
 $parentCommentId = $_POST['parentCommentId'];
 $result = Comment::create($postId, $content, $parentCommentId);
 var_dump($result);
-header("location: ../../post.php?id=" . $postId);
+
+redirect("/post.php?id=" . $postId);

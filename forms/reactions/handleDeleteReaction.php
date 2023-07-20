@@ -11,4 +11,4 @@ $id = $_POST['id'];
 $postId = $_POST['postId'];
 $result = Reaction::delete($id);
 var_dump($result);
-header("location: ../../post.php?id=" . $postId);
+redirect("/post.php?id=" . $postId);

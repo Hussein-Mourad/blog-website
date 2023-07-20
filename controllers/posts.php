@@ -52,7 +52,7 @@ class Post
 
         if (count($errors)) {
             $_SESSION['errors'] = $errors;
-            header("location: ../" . ADD_POST_PAGE);
+            redirect("/createPost.php");
             return null;
         }
 
@@ -84,7 +84,7 @@ class Post
         $post = new Post($postId, $title, $content, $category, time(), $thumbnail);
         $post->authorId = $authorId;
         $_SESSION["success"] = "Post Created Successfully";
-        header("location: ../" . ADD_POST_PAGE);
+        redirect("/createPost.php");
         return $post;
     }
 

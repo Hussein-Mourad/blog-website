@@ -12,4 +12,4 @@ $postId = $_POST['postId'];
 $type = $_POST['type'];
 $result = Reaction::update($id, $type);
 var_dump($result);
-header("location: ../../post.php?id=" . $postId);
+redirect("/post.php?id=" . $postId);
