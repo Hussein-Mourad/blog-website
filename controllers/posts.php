@@ -52,10 +52,13 @@ class Post
             return null;
         }
 
+        $escaped_title = addslashes($title);
+        $escaped_content = addslashes($content);
+
         // Insert Post
         $query = " INSERT INTO posts 
                 (`authorId`, `title`, `content`, `thumbnail`) 
-                VALUES ('$authorId', '$title', '$content', '$thumbnail');";
+                VALUES ('$authorId', '$escaped_title', '$escaped_content', '$thumbnail');";
         $result = db_exec_query($query, "INSERT");
         if (!$result)
             return null;

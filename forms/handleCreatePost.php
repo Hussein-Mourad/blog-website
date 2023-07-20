@@ -12,6 +12,7 @@ $content = $_POST['content'];
 $categoryId = $_POST['category'];
 $thumbnail = null;
 $isThumbnail = !empty($_FILES["thumbnail"]["name"]);
+$filepath = null;
 
 # Upload Image if exists
 if ($isThumbnail) {
@@ -19,13 +20,13 @@ if ($isThumbnail) {
     $result = uploadFile("thumbnail", __DIR__ . "/../uploads");
     if ($result) {
         $filename =  $_SESSION["upload_result"]["filename"];
+        $filepath = "/" . UPLOAD_DIR . "/" . $filename;
     } else {
         header("location: ../" . ADD_POST_PAGE);
         die("Invaild Upload");
     }
 }
 
-$filepath = "/" . UPLOAD_DIR . "/" . $filename;
 
 $result = Post::create($title, $content, $categoryId, $filepath);
 var_dump($result);
