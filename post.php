@@ -184,26 +184,12 @@ $category = $post['category'];
 
             </div>
         </div>
+    </section>
+
+    <section class="container pt-5">
         <div class="mt-4">
             <h2 class="">Comments</h2>
             <hr class="mb-3">
-            <div class="card mb-3">
-                <div class="card-header">
-                    <div class="d-flex align-items-center">
-                        <div class="me-3">
-                            <img src=".<?= $avatar ?>" class="rounded-circle" style="width: 50px;" alt="Avatar" />
-                        </div>
-                        <div class="">
-                            <h6 class="mb-0"><strong><?= $author ?></strong></h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sed facere, sequi natus illo hic iure iste eveniet deleniti? Quasi ab deleniti labore obcaecati quisquam illum velit qui, cumque quod magnam!</p>
-                    <button class="btn btn-secondary">Reply</button>
-                </div>
-            </div>
-
             <?php
             foreach ($comments ?? [] as $id => $comment) {
             ?>
@@ -256,30 +242,6 @@ $category = $post['category'];
                         }
                     }
         ?>
-        <div class="card mb-3 ms-4">
-            <div class="card-header">
-                <div class="d-flex align-items-center">
-                    <div class="me-3">
-                        <img src=".<?= $avatar ?>" class="rounded-circle" style="width: 50px;" alt="Avatar" />
-                    </div>
-                    <div class="">
-                        <h6 class="mb-0"><strong><?= $author ?></strong></h6>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-body">
-                <form action="">
-                    <div class="mb-3">
-                        <label for="reply" class="form-label">Reply</label>
-                        <input type="hidden" name="parentId" value="">
-                        <textarea class="form-control" name="reply" id="reply" rows="3" placeholder="Enter your reply"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add Reply</button>
-                </form>
-            </div>
-        </div>
-        </div>
         </div>
     </section>
 </body>
