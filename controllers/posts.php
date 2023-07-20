@@ -10,18 +10,22 @@ require_once __DIR__ . '/../config.php';
 
 class Post
 {
-    private $id;
-    private $authorId;
-    private $thumbnail;
-    private $title;
-    private $content;
-    private $category;
-    private $updatedAt;
+    public $id;
+    public $authorId;
+    public $author;
+    public $authorAvatar;
+    public $thumbnail;
+    public $title;
+    public $content;
+    public $categoryId;
+    public $category;
+    public $updatedAt;
 
-    public function __construct($id, $authorId, $title, $content, $category,  $updatedAt, $thumbnail = null)
+    public function __construct($id, $title, $content, $category, $updatedAt, $thumbnail = null)
     {
+        if (empty($thumbnail))
+            $thumbnail = "/assets/imgs/default_image.png";
         $this->id = $id;
-        $this->authorId = $authorId;
         $this->title = $title;
         $this->content = $content;
         $this->category = $category;
@@ -77,7 +81,8 @@ class Post
             return null;
         $result = $result->fetch_assoc();
         $category = $result['name'];
-        $post = new Post($postId, $authorId, $title, $content, $category, time(), $thumbnail);
+        $post = new Post($postId, $title, $content, $category, time(), $thumbnail);
+        $post->authorId = $authorId;
         $_SESSION["success"] = "Post Created Successfully";
         header("location: ../" . ADD_POST_PAGE);
         return $post;
@@ -105,7 +110,15 @@ class Post
             return null;
         if (!$result->num_rows)
             return null;
-        return  $result->fetch_all();
+        $posts = [];
+        while ($row = $result->fetch_assoc()) {
+            $post =  new Post($row['id'], $row['title'], $row['content'], $row['category'], $row['updatedAt'], $row['thumbnail']);
+            $post->author = $row['author'];
+            $post->authorAvatar = $row['picture'];
+            $post->categoryId = $row['category_id'];
+            $posts[$row['id']] = $post;
+        }
+        return  $posts;
     }
 
     static function getPost($id)
@@ -132,6 +145,7 @@ class Post
             return null;
         if (!$result->num_rows)
             return null;
+        // TODO: Return Post Object
         return  $result->fetch_assoc();
     }
 
@@ -140,8 +154,7 @@ class Post
         $updateString = '';
         if (empty($id))
             return null;
-        if ($title)
-        {
+        if ($title) {
             $escaped_title = addslashes($title);
             $updateString .= "`title` = '$escaped_title'";
         }
@@ -153,7 +166,6 @@ class Post
             $updateString .= ", `thumbnail` = '$thumbnail'";
         $query = "UPDATE posts SET $updateString WHERE (`id` = $id);";
         $result = db_exec_query($query, "UPDATE");
-        // var_dump($result);
         if (!$result)
             return false;
         return true;
@@ -233,3 +245,9 @@ class Post
 // var_dump($data);
 // Post::delete(12);
 // Post::update(15, "Test", "Testdfjdlkfj", "dlkfjdlkfj/dfjklj");
+
+// $posts = Post::getAllPosts();
+// foreach ($posts as $id => $post) {
+//     print_r($post);
+//     echo "<br>";
+// }

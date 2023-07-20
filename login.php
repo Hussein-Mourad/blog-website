@@ -51,7 +51,7 @@ unset($_SESSION['errors']);
 					<h1 class="pb-4">Login</h1>
 					<form action="forms/handleLogin.php" method="post">
 						<!-- Email input -->
-						<div class="form-outline mb-4">
+						<div class="form-group mb-4">
 							<label class="form-label" for="emailField">Email address</label>
 							<input name="email" type="email" id="emailField" class="form-control form-control-lg" placeholder="Enter email address" />
 							<?php
@@ -65,7 +65,7 @@ unset($_SESSION['errors']);
 						</div>
 
 						<!-- Password input -->
-						<div class="form-outline mb-3">
+						<div class="form-group mb-3">
 							<label class="form-label" for="passwordField">Password</label>
 							<input name="password" id="passwordField" type="password" class="form-control form-control-lg" placeholder="Enter password" />
 							<?php

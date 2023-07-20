@@ -100,6 +100,31 @@ class Comment
         return $comments;
     }
 
+    static function update($id,  $content)
+    {
+        if (empty($id))
+            return null;
+
+        $escaped_content = addslashes($content);
+        $query = "UPDATE comments SET `content` = '$escaped_content' WHERE (`id` = $id);";
+        $result = db_exec_query($query, "UPDATE");
+        if (!$result)
+            return false;
+        return true;
+    }
+
+
+    static function delete($id)
+    {
+        $query = "DELETE FROM comments WHERE id = $id";
+        $result = db_exec_query($query, "DELETE");
+        if (!$result)
+            return false;
+        return true;
+    }
+
+
+
     public function getId()
     {
         return $this->id;

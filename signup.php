@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/controllers/auth.php';
-
+$pageTilte = "Sigup";
 if (!isset($_SESSION))
 	session_start();
 Auth::preventAuth();
@@ -15,10 +15,7 @@ unset($_SESSION['errors']);
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Signup Page</title>
-	<link rel="stylesheet" href="assets/dist/css/bootstrap.min.css">
+	<?php include "components/head.php" ?>
 	<style>
 		.divider:after,
 		.divider:before {
@@ -58,7 +55,7 @@ unset($_SESSION['errors']);
 					<form action="forms/handleSignup.php" method="post">
 						<div class="row">
 							<div class="col-md-6 mb-4">
-								<div class="form-outline">
+								<div class="form-group">
 									<label class="form-label" for="firstNameField">First name</label>
 									<input name="firstName" type="text" id="firstNameField" class="form-control" placeholder="Enter first name" />
 									<?php
@@ -71,7 +68,7 @@ unset($_SESSION['errors']);
 								</div>
 							</div>
 							<div class="col-md-6 mb-4">
-								<div class="form-outline">
+								<div class="form-group">
 									<label class="form-label" for="lastNameField">Last name</label>
 									<input name="lastName" type="text" id="lastNameField" class="form-control" placeholder="Enter last name" />
 									<?php
@@ -85,7 +82,7 @@ unset($_SESSION['errors']);
 							</div>
 						</div>
 						<!-- Email input -->
-						<div class="form-outline mb-4">
+						<div class="form-group mb-4">
 							<label class="form-label" for="emailField">Email address</label>
 							<input name="email" type="email" id="emailField" class="form-control form-control-lg" placeholder="Enter email address" />
 							<?php
@@ -98,7 +95,7 @@ unset($_SESSION['errors']);
 
 						</div>
 
-						<div class="form-outline mb-4">
+						<div class="form-group mb-4">
 							<label class="form-label" for="phoneField">Phone</label>
 							<input name="phone" type="text" id="phoneField" class="form-control form-control-lg" placeholder="Enter phone number" />
 							<?php
@@ -112,7 +109,7 @@ unset($_SESSION['errors']);
 						</div>
 
 						<!-- Password input -->
-						<div class="form-outline mb-3">
+						<div class="form-group mb-3">
 							<label class="form-label" for="passwordField">Password</label>
 							<input name="password" id="passwordField" type="password" class="form-control form-control-lg" placeholder="Enter password" />
 							<?php
