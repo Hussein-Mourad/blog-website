@@ -27,14 +27,12 @@ $authorId = $post['authorId'];
 $author = $post['author'];
 $updatedAt = timeAgo(strtotime($post['updatedAt']));
 $category = $post['category'];
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <?php include "components/head.php" ?>
 
     <style>
@@ -48,13 +46,19 @@ $category = $post['category'];
 </head>
 
 <body>
-    <?php include "./components/navbar.php"; ?>
+    <header>
+        <?php include "./components/navbar.php"; ?>
+        <!-- Jumbotron -->
+        <div id="intro" class="p-5 text-center bg-light">
+            <h1 class="mb-0 h4"><?= ?></h1>
+        </div>
+    </header>
 
     <section class="container pt-5">
-        <?php include "./components/single-post.php"; ?>
+        <?php include "./components/post.php"; ?>
     </section>
 
-    <?php if (isset($comments)) : ?>
+    <?php if (!empty($comments)) : ?>
         <section class="container pt-5">
             <div class="mt-4">
                 <h2 class="">Comments</h2>
@@ -74,8 +78,8 @@ $category = $post['category'];
                     <h3 class="mb-3">Leave a Comment</h3>
                     <input type="hidden" name="postId" value="<?= $postId ?>">
                     <div class="mb-3">
-                        <label for="commentContent" class="form-label">Comment</label>
-                        <textarea class="form-control" name="content" id="commentContent" rows="3" required></textarea>
+                        <!-- <label for="commentContent" class="form-label">Comment</label> -->
+                        <textarea class="form-control" name="content" id="commentContent" rows="3" placeholder="Enter your Comment" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

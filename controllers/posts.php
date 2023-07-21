@@ -147,6 +147,13 @@ class Post
             return null;
         // TODO: Return Post Object
         return  $result->fetch_assoc();
+        // $post =  new Post($row['id'], $row['title'], $row['content'], $row['category'], $row['updatedAt'], $row['thumbnail']);
+            // $post->author = $row['author'];
+            // $post->authorAvatar = $row['picture'];
+            // $post->categoryId = $row['category_id'];
+            // $posts[$row['id']] = $post;
+        // }
+        // return  $posts;
     }
 
     static function update($id, $title = null, $content = null, $thumbnail = null)

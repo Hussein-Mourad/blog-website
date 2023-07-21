@@ -2,8 +2,8 @@
 if (!isset($_SESSION))
     session_start();
 
-require_once __DIR__. '/../db.php';
-require_once __DIR__. '/../utils.php';
+require_once __DIR__ . '/../db.php';
+require_once __DIR__ . '/../utils.php';
 
 
 class User
@@ -92,11 +92,12 @@ class Auth
     static public function AdminOnly()
     {
         // Prevent non admins user from entering some page
-        if (isset($_SESSION["user"]))
+        if (isset($_SESSION["user"])) {
             $user = unserialize($_SESSION["user"]);
-        if ($user['role'] != 'admin')
-            redirect("/index.php");
-        else
+            if ($user->getRole() != 'admin')
+                redirect("/index.php");
+            return $user;
+        } else
             redirect("/login.php");
     }
 

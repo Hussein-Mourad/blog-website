@@ -18,10 +18,14 @@ date_default_timezone_set("Asia/Riyadh");
 </head>
 
 <body>
-    <?php include "components/navbar.php" ?>
-    <section class="container pt-5">
-        <?php include "components/posts.php" ?>
-    </section>
+    <header>
+        <?php include "components/navbar.php" ?>
+    </header>
+    <main>
+        <section class="container pt-5">
+            <?php include "components/posts.php" ?>
+        </section>
+    </main>
     <!-- MDB -->
     <script type="text/javascript" src="assets/mdb5/js/mdb.min.js"></script>
 </body>

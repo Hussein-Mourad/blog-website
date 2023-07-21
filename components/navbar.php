@@ -14,44 +14,32 @@
          <div class="collapse navbar-collapse" id="navbarButtonsExample">
              <!-- Left links -->
              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                 <?php
-                    if ($user && $user->getRole() === 'admin') {
-                    ?>
+                 <?php if ($user && $user->getRole() === 'admin') : ?>
                      <li class="nav-item">
                          <a class="nav-link" href="dashboard.php">Dashboard</a>
                      </li>
-                 <?php
-                    }
-                    ?>
+                 <?php endif; ?>
                  <li class="nav-item">
                      <a class="nav-link" href="index.php">Home</a>
                  </li>
 
-                 <?php
-                    if ($user) {
-                    ?>
+                 <?php if ($user) : ?>
                      <li class="nav-item">
                          <a class="nav-link" href="createPost.php">Add Post</a>
                      </li>
-                 <?php
-                    }
-                    ?>
+                 <?php endif; ?>
 
              </ul>
              <!-- Left links -->
 
              <div class="d-flex align-items-center">
-                 <?php
-                    if ($user) {
-                    ?>
+                 <?php if ($user) : ?>
                      <a href="forms/auth/handleLogout.php">
                          <button type="button" class="btn btn-primary px-3 me-2">
                              Logout
                          </button>
                      </a>
-                 <?php
-                    } else {
-                    ?>
+                 <?php else : ?>
                      <a href="login.php">
                          <button type="button" class="btn btn-link px-3 me-2">
                              Login
@@ -62,9 +50,7 @@
                              Signup
                          </button>
                      </a>
-                 <?php
-                    }
-                    ?>
+                 <?php endif; ?>
              </div>
          </div>
          <!-- Collapsible wrapper -->

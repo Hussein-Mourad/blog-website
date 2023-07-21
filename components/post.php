@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-start">
             <h1 class="card-title mb-3"><?= $title ?></h1>
-            <?php if ($user->getId() == $authorId || $user->getRole() == 'admin') : ?>
+            <?php if (isset($user) && ($user->getId() == $authorId || $user->getRole() == 'admin')) : ?>
                 <div class="d-flex">
                     <form method="post" action="editPost.php" class="me-2">
                         <input name="id" value="<?= $postId ?>" type="hidden" />
