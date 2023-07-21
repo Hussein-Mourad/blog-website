@@ -10,6 +10,7 @@ if (isset($_SESSION["errors"]))
 else
 	$errors = [];
 unset($_SESSION['errors']);
+$pageTilte = "Signup Page"
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,7 +27,7 @@ unset($_SESSION['errors']);
 		}
 
 		.h-custom {
-			height: calc(100% - 72px);
+			height: calc(100% - 74px);
 		}
 
 
@@ -156,6 +157,8 @@ unset($_SESSION['errors']);
 			<!-- Right -->
 		</div>
 	</section>
+	<!-- MDB -->
+    <script type="text/javascript" src="assets/mdb5/js/mdb.min.js"></script>
 </body>
 
 </html>

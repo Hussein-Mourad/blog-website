@@ -46,8 +46,7 @@ class Comment
 
         if (count($errors)) {
             $_SESSION['errors'] = $errors;
-            redirect("/post.php?id=" . $postId);
-            return null;
+            return false;
         }
 
         $escaped_content = addslashes($content);
@@ -62,9 +61,9 @@ class Comment
         $result = db_exec_query($query, "INSERT");
         var_dump($result);
         if (!$result)
-            return null;
+            return false;
         $_SESSION["success"] = "Comment Created Successfully";
-       redirect("/post.php?id=" . $postId);
+        return true;
     }
 
     static function getAllPostComments($postId)

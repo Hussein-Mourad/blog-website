@@ -2,9 +2,7 @@
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-start">
             <h1 class="card-title mb-3"><?= $title ?></h1>
-            <?php
-            if ($user->getId() == $authorId || $user->getRole() == 'admin') {
-            ?>
+            <?php if ($user->getId() == $authorId || $user->getRole() == 'admin') : ?>
                 <div class="d-flex">
                     <form method="post" action="editPost.php" class="me-2">
                         <input name="id" value="<?= $postId ?>" type="hidden" />
@@ -17,9 +15,7 @@
                         <button class=" btn btn-lg btn-danger" type="submit">Delete</button>
                     </form>
                 </div>
-            <?php
-            }
-            ?>
+            <?php endif; ?>
         </div>
         <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
@@ -40,7 +36,6 @@
         <div class="thumbnail">
             <img src=".<?= $thumbnail ?>" class="card-img-top" alt="Thumbnail" />
         </div>
-        <hr>
         <p class="card-text mt-3">
             <?= $content ?>
         </p>

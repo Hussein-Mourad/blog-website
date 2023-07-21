@@ -10,15 +10,14 @@ if (isset($_SESSION["errors"]))
 else
 	$errors = [];
 unset($_SESSION['errors']);
+$pageTitle="Login Page"
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Login Page</title>
-	<link rel="stylesheet" href="assets/dist/css/bootstrap.min.css">
+
+	<?php include "./components/head.php" ?>
 	<style>
 		.divider:after,
 		.divider:before {
@@ -29,7 +28,7 @@ unset($_SESSION['errors']);
 		}
 
 		.h-custom {
-			height: calc(100% - 72px);
+			height: calc(100% - 74px);
 		}
 
 		@media (max-width: 450px) {
@@ -119,6 +118,8 @@ unset($_SESSION['errors']);
 			<!-- Right -->
 		</div>
 	</section>
+	<!-- MDB -->
+    <script type="text/javascript" src="assets/mdb5/js/mdb.min.js"></script>
 </body>
 
 </html>

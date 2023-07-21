@@ -6,6 +6,8 @@ require_once __DIR__ . "/utils.php";
 $user = Auth::isAuth();
 $posts = Post::getAllPosts();
 // FIXME: A Lazy fix as php doesn't get summer time in Egypt
+// TODO: Make Template page
+// TODO: Remove Redirect from Controllers and add them to froms handlers
 date_default_timezone_set("Asia/Riyadh");
 ?>
 <!DOCTYPE html>
@@ -21,7 +23,7 @@ date_default_timezone_set("Asia/Riyadh");
         <?php include "components/posts.php" ?>
     </section>
     <!-- MDB -->
-    <script type="text/javascript" src="js/mdb.min.js"></script>
+    <script type="text/javascript" src="assets/mdb5/js/mdb.min.js"></script>
 </body>
 
 </html>

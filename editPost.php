@@ -151,6 +151,8 @@ unset($_SESSION['success']);
             </form>
         </div>
     </section>
+    <!-- MDB -->
+    <script type="text/javascript" src="assets/mdb5/js/mdb.min.js"></script>
 </body>
 
 
