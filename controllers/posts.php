@@ -19,6 +19,7 @@ class Post
     public $content;
     public $categoryId;
     public $category;
+    public $createdAt;
     public $updatedAt;
 
     public function __construct($id, $title, $content, $category, $updatedAt, $thumbnail = null)
@@ -95,9 +96,10 @@ class Post
                     p.title,
                     p.content,
                     p.thumbnail,
+                    p.createdAt,
+                    p.updatedAt,
                     u.picture,
                     concat(u.firstName, ' ', u.lastName) as author,
-                    p.updatedAt,
                     c.id as category_id,
                     c.name as category
                 FROM posts p
@@ -113,9 +115,10 @@ class Post
         $posts = [];
         while ($row = $result->fetch_assoc()) {
             $post =  new Post($row['id'], $row['title'], $row['content'], $row['category'], $row['updatedAt'], $row['thumbnail']);
-            $post->author = $row['author'];
-            $post->authorAvatar = $row['picture'];
-            $post->categoryId = $row['category_id'];
+            $post->setAuthor($row['author']);
+            $post->setAuthorAvatar($row['picture']);
+            $post->setCategoryId($row['category_id']);
+            $post->setCreatedAt($row['createdAt']);
             $posts[$row['id']] = $post;
         }
         return  $posts;
@@ -129,9 +132,10 @@ class Post
                     p.title,
                     p.content,
                     p.thumbnail,
+                    p.createdAt,
+                    p.updatedAt,
                     u.picture,
                     concat(u.firstName, ' ', u.lastName) as author,
-                    p.updatedAt,
                     c.id as category_id,
                     c.name as category
                 FROM posts p
@@ -145,15 +149,13 @@ class Post
             return null;
         if (!$result->num_rows)
             return null;
-        // TODO: Return Post Object
-        return  $result->fetch_assoc();
-        // $post =  new Post($row['id'], $row['title'], $row['content'], $row['category'], $row['updatedAt'], $row['thumbnail']);
-            // $post->author = $row['author'];
-            // $post->authorAvatar = $row['picture'];
-            // $post->categoryId = $row['category_id'];
-            // $posts[$row['id']] = $post;
-        // }
-        // return  $posts;
+        $row = $result->fetch_assoc();
+        $post =  new Post($row['id'], $row['title'], $row['content'], $row['category'], $row['updatedAt'], $row['thumbnail']);
+        $post->setAuthor($row['author']);
+        $post->setAuthorAvatar($row['picture']);
+        $post->setCategoryId($row['category_id']);
+        $post->setCreatedAt($row['createdAt']);
+        return  $post;
     }
 
     static function update($id, $title = null, $content = null, $thumbnail = null)
@@ -192,9 +194,49 @@ class Post
         return $this->id;
     }
 
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getAuthorId()
     {
         return $this->authorId;
+    }
+
+    public function setAuthorId($authorId)
+    {
+        $this->authorId = $authorId;
+
+        return $this;
+    }
+
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    public function setAuthor($author)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function getAuthorAvatar()
+    {
+        return $this->authorAvatar;
+    }
+
+    public function setAuthorAvatar($authorAvatar)
+    {
+        if (empty($authorAvatar))
+            $authorAvatar = "/assets/imgs/default-avatar.jpg";
+        $this->authorAvatar = $authorAvatar;
+
+        return $this;
     }
 
     public function getThumbnail()
@@ -202,9 +244,25 @@ class Post
         return $this->thumbnail;
     }
 
+    public function setThumbnail($thumbnail)
+    {
+
+        if (empty($thumbnail))
+            $thumbnail = "/assets/imgs/default_image.png";
+        $this->thumbnail = $thumbnail;
+        return $this;
+    }
+
     public function getTitle()
     {
         return $this->title;
+    }
+
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
     }
 
     public function getContent()
@@ -212,9 +270,47 @@ class Post
         return $this->content;
     }
 
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function getCategoryId()
+    {
+        return $this->categoryId;
+    }
+
+    public function setCategoryId($categoryId)
+    {
+        $this->categoryId = $categoryId;
+
+        return $this;
+    }
+
     public function getCategory()
     {
         return $this->category;
+    }
+
+    public function setCategory($category)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     public function getUpdatedAt()
@@ -222,28 +318,10 @@ class Post
         return $this->updatedAt;
     }
 
-
-    public function setThumbnail($thumbnail)
-    {
-        $this->thumbnail = $thumbnail;
-        return $this;
-    }
-
-    public function setTitle($title)
-    {
-        $this->title = $title;
-        return $this;
-    }
-
-    public function setContent($content)
-    {
-        $this->content = $content;
-        return $this;
-    }
-
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 }

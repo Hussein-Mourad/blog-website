@@ -7,26 +7,11 @@ require_once __DIR__ . "/utils.php";
 $user = Auth::isAuth();
 if (!isset($_GET["id"]))
     redirect("/index.php");
-
 $id = $_GET['id'];
 $post = Post::getPost($id);
 if (!$post)
     redirect("/index.php");
-
 $comments = Comment::getAllPostComments($id);
-$postId = $post["id"];
-$title = $post['title'];
-$content = $post['content'];
-$thumbnail = $post['thumbnail'];
-$avatar = $post['picture'];
-if (empty($avatar))
-    $avatar = "/assets/imgs/default-avatar.jpg";
-if (empty($thumbnail))
-    $thumbnail = "/assets/imgs/default_image.png";
-$authorId = $post['authorId'];
-$author = $post['author'];
-$updatedAt = timeAgo(strtotime($post['updatedAt']));
-$category = $post['category'];
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +35,7 @@ $category = $post['category'];
         <?php include "./components/navbar.php"; ?>
         <!-- Jumbotron -->
         <div id="intro" class="p-5 text-center bg-light">
-            <h1 class="mb-0 h4"><?= ?></h1>
+            <h1 class="mb-0 h4"><?= $post->getTitle() ?></h1>
         </div>
     </header>
 
