@@ -6,6 +6,7 @@ require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/../db.php';
 require_once __DIR__ . '/../config.php';
 
+$reactionTypes = array('like', 'haha', 'love', 'sad', 'angry');
 
 class Reaction
 {
@@ -39,7 +40,7 @@ class Reaction
 
         if (count($errors)) {
             $_SESSION['errors'] = $errors;
-            redirect("/post.php?id=" . $postId);
+            // redirect("/post.php?id=" . $postId);
             return null;
         }
 
@@ -52,6 +53,22 @@ class Reaction
         $_SESSION["success"] = "Reaction Created Successfully";
         return true;
         // header("location: ../post.php?id=" . $postId);
+    }
+
+    static function getUserPostReaction($postId)
+    {
+        Auth::AuthOnly();
+        $user = Auth::isAuth();
+        $userId = $user->getId();
+        // SQL query to fetch comments and their replies
+        $query = "SELECT id, postId, userId, type FROM reactions WHERE postId =$postId and userId=$userId ORDER BY type;";
+        $reactions = [];
+        $result = db_exec_query($query, "SELECT");
+        if (!$result->num_rows)
+            return null;
+        $row = $result->fetch_assoc();
+        $reaction = new Reaction($row['id'], $row['postId'], $row['userId'], $row['type']);
+        return $reaction;
     }
 
     static function getAllPostReactions($postId)
@@ -109,9 +126,9 @@ class Reaction
     }
 }
 
-$result = Reaction::getAllPostReactions(54);
-// $result = Comment::getAllPostComments(53);
-foreach ($result as $key => $reaction) {
-    print_r($reaction);
-    echo "<br>";
-}
+// $result = Reaction::getAllPostReactions(54);
+// // $result = Comment::getAllPostComments(53);
+// foreach ($result as $key => $reaction) {
+//     print_r($reaction);
+//     echo "<br>";
+// }

@@ -2,6 +2,7 @@
 require_once __DIR__ . '/controllers/auth.php';
 require_once __DIR__ . '/controllers/posts.php';
 require_once __DIR__ . '/controllers/comments.php';
+require_once __DIR__ . '/controllers/reactions.php';
 require_once __DIR__ . "/utils.php";
 
 $user = Auth::isAuth();
@@ -12,6 +13,8 @@ $post = Post::getPost($id);
 if (!$post)
     redirect("/index.php");
 $comments = Comment::getAllPostComments($id);
+$reactions = Reaction::getAllPostReactions($id);
+$userReaction = Reaction::getUserPostReaction($id);
 ?>
 
 <!DOCTYPE html>
@@ -21,11 +24,13 @@ $comments = Comment::getAllPostComments($id);
     <?php include "components/head.php" ?>
 
     <style>
-        .thumbnail {
-            /* max-width: 300px; */
-            width: 100%;
-            max-height: 1000px;
-            overflow: hidden;
+        .dropdown:hover>.dropdown-menu {
+            display: block;
+        }
+
+        .dropdown>.dropdown-toggle:active {
+            /*Without this, clicking will make it sticky*/
+            pointer-events: none;
         }
     </style>
 </head>
@@ -41,22 +46,8 @@ $comments = Comment::getAllPostComments($id);
     </header>
     <main>
         <div class="container md-8 mb-4">
-            <div class="reactions btn-group">
-                <button class="reaction-btn btn btn-secondary" data-post-id="<?= $post->getId() ?>" data-reaction-type="like" onclick="handleAddReaction(this)">&#128077;Like</button>
-                <button class="reaction-btn btn btn-secondary" data-post-id="<?= $post->getId() ?>" data-reaction-type="love" onclick="handleAddReaction(this)">Love</button>
-                <button class="reaction-btn btn btn-secondary" data-post-id="<?= $post->getId() ?>" data-reaction-type="haha" onclick="handleAddReaction(this)">Haha</button>
-                <button class="reaction-btn btn btn-secondary" data-post-id="<?= $post->getId() ?>" data-reaction-type="sad" onclick="handleAddReaction(this)">Sad</button>
-                <button class="reaction-btn btn btn-secondary" data-post-id="<?= $post->getId() ?>" data-reaction-type="angry" onclick="handleAddReaction(this)">Angry</button>
-            </div>
-            <div class="reactions-summary mt-2">
-                <span class="reaction-count" data-post-id="<?= $post->getId() ?>" data-reaction-type="like">0</span> Likes
-                <span class="reaction-count" data-post-id="<?= $post->getId() ?>" data-reaction-type="love">0</span> Loves
-                <span class="reaction-count" data-post-id="<?= $post->getId() ?>" data-reaction-type="haha">0</span> Hahas
-                <span class="reaction-count" data-post-id="<?= $post->getId() ?>" data-reaction-type="sad">0</span> Sads
-                <span class="reaction-count" data-post-id="<?= $post->getId() ?>" data-reaction-type="angry">0</span> Angrys
-            </div>
             <!--Section: Post data-mdb-->
-            <section class="border-bottom mb-4">
+            <section class="border-bottom mb-3">
                 <div class="d-flex justify-content-center">
                     <img src=".<?= $post->getThumbnail() ?>" class="img-fluid shadow-2-strong rounded-5 mb-4" alt="" />
                 </div>
@@ -83,19 +74,48 @@ $comments = Comment::getAllPostComments($id);
             </section>
             <!--Section: Post data-mdb-->
 
-            <section class="border-bottom mb-4">
+            <section class="border-bottom mb-5">
                 <?php if (isset($user) && ($user->getId() == $post->getAuthorId() || $user->getRole() == 'admin')) : ?>
-                    <div class="d-flex justify-content-between mb-4">
-                        <div class="">
-                            <div class="d-flex align-items-center">
-                                <form action="forms/reactions/handleCreateReaction.php">
-                                    <button class="me-3 mb-0 btn btn-link">
-                                        <i class="fa-regular fa-thumbs-up me-2"></i>Like
+                    <div class="d-flex justify-content-between mb-3">
+                        <div class="d-flex align-items-center">
+                            <!-- Default dropup button -->
+                            <div class="dropdown">
+                                <button class="btn btn-link text-muted">
+                                    <i class="fa-xl fa-regular fa-thumbs-up me-2"></i><strong>Like</strong>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <div class="btn-group">
+                                        <?php foreach ($reactionTypes as $key => $reaction) : ?>
+                                            <button class="btn btn-link text-muted"><?= $reaction ?></button>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="me-3">
+                                <?php if (empty($userReaction)) : ?>
+                                    <form action="forms/reactions/handleCreateReaction.php" method="post">
+                                        <input name="postId" value="<?= $post->getId() ?>" type="hidden" />
+                                        <input type="hidden" name="type" value="like" />
+                                        <button class="btn btn-link text-muted">
+                                            <i class="fa-xl fa-regular fa-thumbs-up me-2"></i><strong>Like</strong>
+                                        </button>
+                                    </form>
+                                <?php else : ?>
+                                    <form action="forms/reactions/handleDeleteReaction.php" method="post">
+                                        <input name="id" value="<?= $userReaction->getId() ?>" type="hidden" />
+                                        <input name="postId" value="<?= $post->getId() ?>" type="hidden" />
+                                        <button class="btn btn-link">
+                                            <i class="fa-xl fa-solid fa-thumbs-up me-2"></i><strong>Like</strong>
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
+                            </div>
+                            <div>
+                                <form>
+                                    <button class="btn btn-link text-muted ps-0">
+                                        <i class="fa-xl fa-regular fa-comment me-2"></i><strong>Comment</strong>
                                     </button>
                                 </form>
-                                <button class="mb-0 btn btn-link">
-                                    <i class="fa-regular fa-comment me-2"></i>Comment
-                                </button>
                             </div>
                         </div>
                         <div class="d-flex justify-content-end">
@@ -106,7 +126,7 @@ $comments = Comment::getAllPostComments($id);
                                 <button class="btn btn-primary px-4">Edit</button>
                             </form>
                             <form action="forms/posts/handleDeletePost.php" method="post">
-                                <input name="id" value="<?= $postId ?>" type="hidden" />
+                                <input name="id" value="<?= $post->getId() ?>" type="hidden" />
                                 <button class=" btn btn-danger" type="submit">Delete</button>
                             </form>
                         </div>
@@ -152,8 +172,8 @@ $comments = Comment::getAllPostComments($id);
                 <section>
                     <p class="text-center"><strong>Leave a comment</strong></p>
 
-                    <form action="forms/comments/handleCreateComment.php">
-                        <input type="hidden" name="postId" value="<?= $postId ?>">
+                    <form action="forms/comments/handleCreateComment.php" method="post">
+                        <input name="postId" value="<?= $post->getId() ?>" type="hidden" />
                         <div class="form-outline mb-4">
                             <textarea class="form-control" id="form4Example3" rows="4" name="content" required></textarea>
                             <label class="form-label" for="form4Example3">Text</label>
@@ -170,7 +190,6 @@ $comments = Comment::getAllPostComments($id);
 
     <!-- MDB -->
     <script type="text/javascript" src="assets/mdb5/js/mdb.min.js"></script>
-    <script type="text/javascript" src="assets/js/script.js"></script>
 </body>
 
 </html>
