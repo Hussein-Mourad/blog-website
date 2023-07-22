@@ -56,6 +56,7 @@ date_default_timezone_set("Asia/Riyadh");
         <div id="intro" class="mt-5 p-5 text-center bg-light">
             <h1 class="mb-0 h4"><?= $post->getTitle() ?></h1>
         </div>
+
         <!-- Jumbotron -->
     </header>
     <main>
