@@ -156,63 +156,81 @@ date_default_timezone_set("Asia/Riyadh");
             <!--Section: Text-->
 
             <!--Section: Comments-->
-            <?php if (!empty($comments)) :?>
-            <section class="border-bottom mb-3">
-                <p class="text-center"><strong>Comments: <?= count($comments); ?></strong></p>
-                <?php foreach ($comments ?? [] as $id => $comment) : ?>
-                    <div class="d-flex flex-start mb-3">
-                        <img class="rounded-circle shadow-1-strong me-3" src=".<?= $comment->avatar ?>" alt="avatar" width="65" height="65" />
-                        <div class="flex-grow-1 flex-shrink-1">
-                            <div class="">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <p class="mb-1">
-                                        <?= $comment->username ?> <span class="small ms-1"><?= timeAgo(strtotime($comment->updatedAt)) ?></span>
-                                    </p>
-                                    <button class="btn btn-link" onclick="showReplyForm(<?= 'replyForm' . $comment->getId() ?>)"><i class="fas fa-reply fa-xs me-2"></i><span class="small"> reply</span></button>
-                                </div>
-                                <p class="small mb-0">
-                                    <?= $comment->content ?>
-                                </p>
-                            </div>
-                            <?php if (!empty($comment->replies)) : ?>
-                                <?php foreach ($comment->replies ?? [] as $reply) : ?>
-                                    <div class="d-flex flex-start mt-4">
-                                        <div class="me-3">
-                                            <img class="rounded-circle shadow-1-strong" src=".<?= $reply->avatar ?>" alt="avatar" width="65" height="65" />
-                                        </div>
-                                        <div class="flex-grow-1 flex-shrink-1">
-                                            <div>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <p class="mb-1">
-                                                        <?= $reply->username ?> <span class="small ms-1"> <?= timeAgo(strtotime($reply->updatedAt)) ?></span>
-                                                    </p>
-                                                </div>
-                                                <p class="small mb-0">
-                                                    <?= $reply->content ?>
-                                                </p>
-                                            </div>
+            <?php if (!empty($comments)) : ?>
+                <section class="border-bottom mb-3">
+                    <p class="text-center"><strong>Comments: <?= count($comments); ?></strong></p>
+                    <?php foreach ($comments ?? [] as $id => $comment) : ?>
+                        <div class="d-flex flex-start mb-3">
+                            <img class="rounded-circle shadow-1-strong me-3" src=".<?= $comment->avatar ?>" alt="avatar" width="65" height="65" />
+                            <div class="flex-grow-1 flex-shrink-1">
+                                <div class="">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <p class="mb-1">
+                                            <?= $comment->username ?> <span class="small ms-1"><?= timeAgo(strtotime($comment->updatedAt)) ?></span>
+                                        </p>
+                                        <div class="d-flex">
+                                            <?php if (isset($user)) : ?>
+                                                <button class="btn btn-link" onclick="showReplyForm(<?= 'replyForm' . $comment->getId() ?>)"><i class="fas fa-reply fa-xs me-2"></i><span class="small"> reply</span></button>
+                                            <?php endif; ?>
+                                            <?php if (isset($user) && ($user->getId() == $post->getAuthorId() || $user->getRole() == 'admin')) : ?>
+                                                <form action="forms/comments/handleDeleteComment.php" method="post">
+                                                    <input name="id" value="<?= $comment->getId() ?>" type="hidden" />
+                                                    <input type="hidden" name="postId" value="<?= $post->getId() ?>">
+                                                    <button class=" btn btn-danger" type="submit">Delete</button>
+                                                </form>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                    <?php if (isset($user)) : ?>
-                        <div class="mt-4 mb-5">
-                            <form action="./forms/comments/handleCreateComment.php" method='post' id="<?= "replyForm" . $comment->getId() ?>" style="display:none;">
-                                <div class="form-outline mb-3">
-                                    <textarea class="form-control" name="content" id="reply" rows="2" placeholder="Enter your reply" required></textarea>
-                                    <label for="reply" class="form-label">Leave a Reply</label>
+                                    <p class="small mb-0">
+                                        <?= $comment->content ?>
+                                    </p>
                                 </div>
-                                <input type="hidden" name="postId" value="<?= $post->getId() ?>">
-                                <input type="hidden" name="parentCommentId" value="<?= $comment->getId() ?>">
-                                <button type="submit" class="btn btn-primary">Reply</button>
-                            </form>
+                                <?php if (!empty($comment->replies)) : ?>
+                                    <?php foreach ($comment->replies ?? [] as $reply) : ?>
+                                        <div class="d-flex flex-start mt-4">
+                                            <div class="me-3">
+                                                <img class="rounded-circle shadow-1-strong" src=".<?= $reply->avatar ?>" alt="avatar" width="65" height="65" />
+                                            </div>
+                                            <div class="flex-grow-1 flex-shrink-1">
+                                                <div>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <p class="mb-1">
+                                                            <?= $reply->username ?> <span class="small ms-1"> <?= timeAgo(strtotime($reply->updatedAt)) ?></span>
+                                                        </p>
+                                                        <?php if (isset($user) && ($user->getId() == $post->getAuthorId() || $user->getRole() == 'admin')) : ?>
+                                                            <form action="forms/comments/handleDeleteComment.php" method="post">
+                                                                <input name="id" value="<?= $reply->getId() ?>" type="hidden" />
+                                                                <input type="hidden" name="postId" value="<?= $post->getId() ?>">
+                                                                <button class=" btn btn-danger" type="submit">Delete</button>
+                                                            </form>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                    <p class="small mb-0">
+                                                        <?= $reply->content ?>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </div>
                         </div>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </section>
-            <!--Section: Comments-->
+                        <?php if (isset($user)) : ?>
+                            <div class="mt-4 mb-5">
+                                <form action="./forms/comments/handleCreateComment.php" method='post' id="<?= "replyForm" . $comment->getId() ?>" style="display:none;">
+                                    <div class="form-outline mb-3">
+                                        <textarea class="form-control" name="content" id="reply" rows="2" placeholder="Enter your reply" required></textarea>
+                                        <label for="reply" class="form-label">Leave a Reply</label>
+                                    </div>
+                                    <input type="hidden" name="postId" value="<?= $post->getId() ?>">
+                                    <input type="hidden" name="parentCommentId" value="<?= $comment->getId() ?>">
+                                    <button type="submit" class="btn btn-primary">Reply</button>
+                                </form>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </section>
+                <!--Section: Comments-->
             <?php endif; ?>
             <?php if ($user) : ?>
                 <!--Section: Reply-->

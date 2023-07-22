@@ -9,6 +9,6 @@ if (!isset($_SESSION))
 
 $id = $_POST['id'];
 $postId = $_POST['postId'];
-$result = Comment::delete($id, $content, $parentCommentId);
+$result = Comment::delete($id);
 var_dump($result);
 redirect("/post.php?id=" . $postId);

@@ -66,6 +66,35 @@ class Comment
         return true;
     }
 
+
+    static function getAllComments()
+    {
+        // SQL query to fetch comments and their replies
+        $query = "SELECT 
+                        id,
+                        postId,
+                        userId,
+                        parentId,
+                        content,
+                        updatedAt,
+                        CONCAT(u.firstName, ' ', u.lastName) as username,
+                    FROM comments;";
+        $comments = [];
+        $result = db_exec_query($query, "SELECT");
+        while ($row = $result->fetch_assoc()) {
+            $id =  $row['id'];
+            $parentId =  $row['parentId'];
+            $comment = new Comment($id, $row['postId'], $row['userId'], $row['content'], $row['updatedAt'], $row['username'], $row['avatar']);
+            if ($parentId)
+                $comments[$parentId]->replies[] = $comment;
+            else
+                $comments[$id] = $comment;
+        }
+        return $comments;
+    }
+
+
+
     static function getAllPostComments($postId)
     {
         // SQL query to fetch comments and their replies

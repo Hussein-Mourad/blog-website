@@ -15,9 +15,12 @@ class User
     private $phone;
     private $picture;
     private $role;
+    public $createdAt;
 
     public function __construct($id, $firstName, $lastName, $email, $phone, $role = 'regular', $picture = null)
     {
+        if (empty($picture))
+            $picture = "/assets/imgs/default-avatar.jpg";
         $this->id = $id;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
@@ -27,9 +30,52 @@ class User
         $this->role = $role;
     }
 
+    static function getAllUsers()
+    {
+        $query = "SELECT
+                    id,
+                    firstName,
+                    lastName,
+                    email,
+                    phone,
+                    picture as avatar,
+                    createdAt,
+                    role
+                FROM users;";
+        $result = db_exec_query($query, "SELECT");
+        if (!$result)
+            return null;
+        if (!$result->num_rows)
+            return null;
+        $users = [];
+        while ($row = $result->fetch_assoc()) {
+            $user =  new User($row['id'], $row['firstName'], $row['lastName'], $row['email'], $row['phone'], $row['role'], $row['avatar']);
+            $user->setCreatedAt($row['createdAt']);
+            $users[$row['id']] = $user;
+        }
+        return  $users;
+    }
+
+
+    static function delete($id)
+    {
+        $query = "DELETE FROM users WHERE id = $id";
+        $result = db_exec_query($query, "DELETE");
+        if (!$result)
+            return false;
+        return true;
+    }
+
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getFirstName()
@@ -37,9 +83,23 @@ class User
         return $this->firstName;
     }
 
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
     public function getLastName()
     {
         return $this->lastName;
+    }
+
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+
+        return $this;
     }
 
     public function getEmail()
@@ -47,9 +107,23 @@ class User
         return $this->email;
     }
 
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
     public function getPhone()
     {
         return $this->phone;
+    }
+
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+
+        return $this;
     }
 
     public function getPicture()
@@ -60,12 +134,32 @@ class User
     public function setPicture($picture)
     {
         $this->picture = $picture;
+
         return $this;
     }
 
     public function getRole()
     {
         return $this->role;
+    }
+
+    public function setRole($role)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 }
 
@@ -107,7 +201,6 @@ class Auth
         if (isset($_SESSION["user"]))
             redirect("/index.php");
     }
-
 
 
     static public function register($firstName, $lastName, $email, $phone, $passowrd, $role = 'regular')
