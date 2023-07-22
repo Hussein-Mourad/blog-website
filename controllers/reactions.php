@@ -71,6 +71,19 @@ class Reaction
         return $reaction;
     }
 
+    static function getAllReactions()
+    {
+        // SQL query to fetch comments and their replies
+        $query = "SELECT id, postId, userId, type FROM reactions ORDER BY type;";
+        $reactions = [];
+        $result = db_exec_query($query, "SELECT");
+        while ($row = $result->fetch_assoc()) {
+            $reaction = new Reaction($row['id'], $row['postId'], $row['userId'], $row['type']);
+            $reactions[$row['id']] = $reaction;
+        }
+        return $reactions;
+    }
+
     static function getAllPostReactions($postId)
     {
         // SQL query to fetch comments and their replies

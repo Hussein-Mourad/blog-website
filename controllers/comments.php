@@ -71,14 +71,19 @@ class Comment
     {
         // SQL query to fetch comments and their replies
         $query = "SELECT 
-                        id,
-                        postId,
-                        userId,
-                        parentId,
-                        content,
-                        updatedAt,
+                        c.id,
+                        c.postId,
+                        c.userId,
+                        c.parentId,
+                        c.content,
+                        c.updatedAt,
                         CONCAT(u.firstName, ' ', u.lastName) as username,
-                    FROM comments;";
+                        u.picture AS avatar
+                    FROM
+                        comments c
+                            JOIN
+                        users u ON u.id = c.userId
+                    ;";
         $comments = [];
         $result = db_exec_query($query, "SELECT");
         while ($row = $result->fetch_assoc()) {

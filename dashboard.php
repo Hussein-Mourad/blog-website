@@ -8,7 +8,8 @@ $pageTile = "Dashboard";
 $user = Auth::AdminOnly();
 $allUsers = User::getAllUsers();
 $posts = Post::getAllPosts();
-$comments = Comment::getAllPosts();
+$comments = Comment::getAllComments();
+$reactions = Reaction::getAllReactions();
 ?>
 <!DOCTYPE html>
 <html lang="en">
