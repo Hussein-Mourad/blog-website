@@ -84,12 +84,12 @@ class Post
         $category = $result['name'];
         $post = new Post($postId, $title, $content, $category, time(), $thumbnail);
         $post->authorId = $authorId;
-        $_SESSION["success"] = "Post Created Successfully";
+        $_SESSION["post-success-msg"] = "Post Created Successfully";
         redirect("/createPost.php");
         return $post;
     }
 
-    static function getAllPosts()
+    static function getAll()
     {
         $query = "SELECT
                     p.id,
@@ -124,7 +124,7 @@ class Post
         return  $posts;
     }
 
-    static function getPost($id)
+    static function get($id)
     {
         $query = "SELECT
                     p.id,
@@ -331,7 +331,7 @@ class Post
 // Post::delete(12);
 // Post::update(15, "Test", "Testdfjdlkfj", "dlkfjdlkfj/dfjklj");
 
-// $posts = Post::getAllPosts();
+// $posts = Post::getAll();
 // foreach ($posts as $id => $post) {
 //     print_r($post);
 //     echo "<br>";

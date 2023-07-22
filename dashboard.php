@@ -6,10 +6,10 @@ require_once __DIR__ . '/controllers/reactions.php';
 
 $pageTile = "Dashboard";
 $user = Auth::AdminOnly();
-$allUsers = User::getAllUsers();
-$posts = Post::getAllPosts();
-$comments = Comment::getAllComments();
-$reactions = Reaction::getAllReactions();
+$allUsers = User::getAll();
+$posts = Post::getAll();
+$comments = Comment::getAll();
+$reactions = Reaction::getAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -141,7 +141,7 @@ $reactions = Reaction::getAllReactions();
                                         </div>
                                     </div>
                                     <div class="align-self-center">
-                                        <h2 class="h1 mb-0">18,000</h2>
+                                        <h2 class="h1 mb-0"><?= count($posts) ?></h2>
                                     </div>
                                 </div>
                             </div>
@@ -157,11 +157,10 @@ $reactions = Reaction::getAllReactions();
                                         </div>
                                         <div>
                                             <h4>Total Comments</h4>
-                                            <p class="mb-0">Monthly blog posts</p>
                                         </div>
                                     </div>
                                     <div class="align-self-center">
-                                        <h2 class="h1 mb-0">84,695</h2>
+                                        <h2 class="h1 mb-0"><?= count($comments) ?></h2>
                                     </div>
                                 </div>
                             </div>
@@ -175,15 +174,14 @@ $reactions = Reaction::getAllReactions();
                                 <div class="d-flex justify-content-between p-md-1">
                                     <div class="d-flex flex-row">
                                         <div class="align-self-center">
-                                            <h2 class="h1 mb-0 me-4">$76,456.00</h2>
+                                            <i class="far fa-thumbs-up text-primary fa-3x me-4"></i>
                                         </div>
                                         <div>
-                                            <h4>Total Sales</h4>
-                                            <p class="mb-0">Monthly Sales Amount</p>
+                                            <h4>Total Reactions</h4>
                                         </div>
                                     </div>
                                     <div class="align-self-center">
-                                        <i class="far fa-heart text-danger fa-3x"></i>
+                                        <h2 class="h1 mb-0"><?= count($reactions) ?></h2>
                                     </div>
                                 </div>
                             </div>
@@ -195,15 +193,14 @@ $reactions = Reaction::getAllReactions();
                                 <div class="d-flex justify-content-between p-md-1">
                                     <div class="d-flex flex-row">
                                         <div class="align-self-center">
-                                            <h2 class="h1 mb-0 me-4">$36,000.00</h2>
+                                            <i class="far fa-user text-danger fa-3x me-4"></i>
                                         </div>
                                         <div>
-                                            <h4>Total Cost</h4>
-                                            <p class="mb-0">Monthly Cost</p>
+                                            <h4>Total Users</h4>
                                         </div>
                                     </div>
                                     <div class="align-self-center">
-                                        <i class="fas fa-wallet text-success fa-3x"></i>
+                                        <h2 class="h1 mb-0"><?= count($allUsers) ?></h2>
                                     </div>
                                 </div>
                             </div>

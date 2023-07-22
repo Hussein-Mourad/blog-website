@@ -62,12 +62,12 @@ class Comment
         var_dump($result);
         if (!$result)
             return false;
-        $_SESSION["success"] = "Comment Created Successfully";
+        $_SESSION["comment-success-msg"] = "Comment Created Successfully";
         return true;
     }
 
 
-    static function getAllComments()
+    static function getAll()
     {
         // SQL query to fetch comments and their replies
         $query = "SELECT 

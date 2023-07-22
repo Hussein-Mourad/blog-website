@@ -12,13 +12,13 @@ else
     $upload_error = false;
 if (isset($_SESSION['errors']))
     $errors = $_SESSION['errors'];
-if (isset($_SESSION['success']))
-    $success_msg = $_SESSION['success'];
+if (isset($_SESSION['post-success-msg']))
+    $success_msg = $_SESSION['post-success-msg'];
 else
     $success_msg = null;
 unset($_SESSION['upload_result']);
 unset($_SESSION['errors']);
-unset($_SESSION['success']);
+unset($_SESSION['post-success-msg']);
 ?>
 
 <!DOCTYPE html>

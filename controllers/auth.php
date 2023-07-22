@@ -30,7 +30,7 @@ class User
         $this->role = $role;
     }
 
-    static function getAllUsers()
+    static function getAll()
     {
         $query = "SELECT
                     id,

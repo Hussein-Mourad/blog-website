@@ -50,7 +50,7 @@ class Reaction
         $result = db_exec_query($query, "INSERT");
         if (!$result)
             return null;
-        $_SESSION["success"] = "Reaction Created Successfully";
+        $_SESSION["reaction-success-msg"] = "Reaction Created Successfully";
         return true;
         // header("location: ../post.php?id=" . $postId);
     }
@@ -71,7 +71,7 @@ class Reaction
         return $reaction;
     }
 
-    static function getAllReactions()
+    static function getAll()
     {
         // SQL query to fetch comments and their replies
         $query = "SELECT id, postId, userId, type FROM reactions ORDER BY type;";

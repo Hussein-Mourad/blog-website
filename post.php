@@ -9,7 +9,7 @@ $user = Auth::isAuth();
 if (!isset($_GET["id"]))
     redirect("/index.php");
 $id = $_GET['id'];
-$post = Post::getPost($id);
+$post = Post::get($id);
 if (!$post)
     redirect("/index.php");
 $comments = Comment::getAllPostComments($id);

@@ -11,27 +11,27 @@ if (!isset($_POST['id']) && !isset($_POST["title"]) && !isset($_POST["content"])
 $id = $_POST['id'];
 $title = $_POST['title'];
 $content = $_POST['content'];
-unset($_SESSION['success']);
+// unset($_SESSION['success']);
 if (isset($_SESSION['upload_result']['error']))
     $upload_error = $_SESSION['upload_result']['error'];
 else
     $upload_error = false;
 if (isset($_SESSION['errors']))
     $errors = $_SESSION['errors'];
-if (isset($_SESSION['success']))
-    $success_msg = $_SESSION['success'];
+// if (isset($_SESSION['success']))
+// $success_msg = $_SESSION['success'];
 else
     $success_msg = null;
 unset($_SESSION['upload_result']);
 unset($_SESSION['errors']);
-unset($_SESSION['success']);
+// unset($_SESSION['success']);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    
+
     <?php include "components/head.php" ?>
 
     <script>

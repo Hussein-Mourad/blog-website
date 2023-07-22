@@ -4,7 +4,7 @@ require_once __DIR__ . '/controllers/posts.php';
 require_once __DIR__ . "/utils.php";
 
 $user = Auth::isAuth();
-$posts = Post::getAllPosts();
+$posts = Post::getAll();
 // FIXME: A Lazy fix as php doesn't get summer time in Egypt
 // TODO: Make Template page
 // TODO: Remove Redirect from Controllers and add them to froms handlers
@@ -316,7 +316,7 @@ date_default_timezone_set("Asia/Riyadh");
                 </div>
                 <!--Grid column-->
 
-               
+
                 <!--Grid column-->
             </div>
             <!--Grid row-->
