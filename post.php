@@ -73,6 +73,24 @@ date_default_timezone_set("Asia/Riyadh");
                         </span>
                     </div>
                 </div>
+                <?php if (!empty($reactions)) : ?>
+                    <section class="">
+                        <div class="d-flex">
+                            <?php $viewedReactionTypes = [];
+                            foreach ($reactions as $reaction) : ?>
+                                <div class="me-1">
+                                    <?php
+                                    $type = $reactionEmojis[$reaction->getType()];
+                                    if (!in_array($type, $viewedReactionTypes))
+                                        echo $reactionEmojis[$reaction->getType()];
+                                    $viewedReactionTypes[] = $type;
+                                    ?>
+                                </div>
+                            <?php endforeach; ?>
+                            <div class="me-1"><?= count($reactions); ?></div>
+                        </div>
+                    </section>
+                <?php endif; ?>
             </section>
             <!--Section: Post data-mdb-->
 
@@ -80,7 +98,6 @@ date_default_timezone_set("Asia/Riyadh");
                 <section class="border-bottom mb-5">
                     <div class="d-flex justify-content-between mb-3">
                         <div class="d-flex align-items-center">
-
                             <div class="me-3">
                                 <?php if (empty($userReaction)) : ?>
                                     <div class="dropdown">
