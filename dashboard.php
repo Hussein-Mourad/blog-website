@@ -112,9 +112,7 @@ $reactions = Reaction::getAll();
                                 <td>
                                     <form action="forms/users/handleDeleteUser.php" method="post">
                                         <input name="id" value="<?= $user->getId() ?>" type="hidden" />
-                                        <button type="submit" class="btn btn-danger btn-sm btn-rounded">
-                                            Delete
-                                        </button>
+                                        <button class=" btn btn-link btn-floating text-muted" type="submit"><i class="fas fa-xl fa-trash-can"></i></button>
                                     </form>
 
                                 </td>

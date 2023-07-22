@@ -53,7 +53,7 @@ date_default_timezone_set("Asia/Riyadh");
     <header>
         <?php include "./components/navbar.php"; ?>
         <!-- Jumbotron -->
-        <div id="intro" class="p-5 text-center bg-light">
+        <div id="intro" class="mt-5 p-5 text-center bg-light">
             <h1 class="mb-0 h4"><?= $post->getTitle() ?></h1>
         </div>
         <!-- Jumbotron -->
@@ -132,11 +132,11 @@ date_default_timezone_set("Asia/Riyadh");
                                     <input name="id" value="<?= $post->getId() ?>" type="hidden" />
                                     <textarea name="title" class="d-none" id="text"><?= $post->getTitle() ?></textarea>
                                     <textarea name="content" class="d-none" id="content"><?= $post->getContent() ?></textarea>
-                                    <button class="btn btn-primary px-4">Edit</button>
+                                    <button class=" btn btn-link btn-floating text-muted" type="submit"><i class="fas fa-xl fa-pen"></i></button>
                                 </form>
                                 <form action="forms/posts/handleDeletePost.php" method="post">
                                     <input name="id" value="<?= $post->getId() ?>" type="hidden" />
-                                    <button class=" btn btn-danger" type="submit">Delete</button>
+                                    <button class=" btn btn-link btn-floating text-muted" type="submit"><i class="fas fa-xl fa-trash-can"></i></button>
                                 </form>
                             </div>
                         <?php endif; ?>
@@ -176,7 +176,7 @@ date_default_timezone_set("Asia/Riyadh");
                                                 <form action="forms/comments/handleDeleteComment.php" method="post">
                                                     <input name="id" value="<?= $comment->getId() ?>" type="hidden" />
                                                     <input type="hidden" name="postId" value="<?= $post->getId() ?>">
-                                                    <button class=" btn btn-danger" type="submit">Delete</button>
+                                                    <button class=" btn btn-link btn-floating text-muted" type="submit"><i class="fas fa-xl fa-trash-can"></i></button>
                                                 </form>
                                             <?php endif; ?>
                                         </div>
@@ -201,7 +201,7 @@ date_default_timezone_set("Asia/Riyadh");
                                                             <form action="forms/comments/handleDeleteComment.php" method="post">
                                                                 <input name="id" value="<?= $reply->getId() ?>" type="hidden" />
                                                                 <input type="hidden" name="postId" value="<?= $post->getId() ?>">
-                                                                <button class=" btn btn-danger" type="submit">Delete</button>
+                                                                <button class=" btn btn-link btn-floating text-muted" type="submit"><i class="fas fa-xl fa-trash-can"></i></button>
                                                             </form>
                                                         <?php endif; ?>
                                                     </div>

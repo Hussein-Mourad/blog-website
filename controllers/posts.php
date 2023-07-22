@@ -109,9 +109,9 @@ class Post
                 ORDER BY c.id;";
         $result = db_exec_query($query, "SELECT");
         if (!$result)
-            return null;
+            return [];
         if (!$result->num_rows)
-            return null;
+            return [];
         $posts = [];
         while ($row = $result->fetch_assoc()) {
             $post =  new Post($row['id'], $row['title'], $row['content'], $row['category'], $row['updatedAt'], $row['thumbnail']);

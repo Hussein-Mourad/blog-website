@@ -89,6 +89,6 @@ function redirect($page)
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
     $serverName = $_SERVER['SERVER_NAME'];
     $baseUrl = $protocol . $serverName;
-    $url= $baseUrl . PROJECT_ROOT . $page;
+    $url = $baseUrl . PROJECT_ROOT . $page;
     header("location: $url");
 }
