@@ -10,7 +10,8 @@ if (!isset($_SESSION))
 $id = $_POST['id'];
 $title = $_POST['title'];
 $content = $_POST['content'];
-var_dump($id, $title, $content);
+// var_dump($id, $title, $content);
 $result = Post::update($id, $title, $content);
 var_dump($result);
-redirect("/post.php?=" . $id);
+if ($result)
+    redirect("/post.php?=" . $id);

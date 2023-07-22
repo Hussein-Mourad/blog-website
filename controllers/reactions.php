@@ -124,6 +124,11 @@ class Reaction
     {
         return $this->userId;
     }
+
+    public function getType()
+    {
+        return $this->type;
+    }
 }
 
 // $result = Reaction::getAllPostReactions(54);

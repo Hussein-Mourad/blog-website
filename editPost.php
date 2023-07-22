@@ -11,7 +11,7 @@ if (!isset($_POST['id']) && !isset($_POST["title"]) && !isset($_POST["content"])
 $id = $_POST['id'];
 $title = $_POST['title'];
 $content = $_POST['content'];
-
+unset($_SESSION['success']);
 if (isset($_SESSION['upload_result']['error']))
     $upload_error = $_SESSION['upload_result']['error'];
 else
